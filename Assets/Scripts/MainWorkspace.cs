@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Newtonsoft.Json;
@@ -9,6 +10,7 @@ public class MainWorkspace : MonoBehaviour
 {
     public Text totalScene;
     public Text currentScene;
+    public ToggleGroup ObjTxtColor;
 
     // Start is called before the first frame update
     void Start()
