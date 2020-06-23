@@ -11,11 +11,19 @@ public class MainWorkspace : MonoBehaviour
     public Text totalScene;
     public Text currentScene;
     public ToggleGroup ObjTxtColor;
+    public InputField Objectives;
+    public int[,] objTxtColors = new int[,] {
+        {3, 3, 3},
+        {112, 112, 112},
+        {226, 226, 129},
+        {42, 82, 140},
+        {124, 0, 0}
+    };
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -47,5 +55,16 @@ public class MainWorkspace : MonoBehaviour
 
     public void deleteScene() {
         
+    }
+
+    public void changeObjectiveTextColor() {
+        Toggle[] objTxtColorToggle = ObjTxtColor.GetComponentsInChildren<Toggle>();
+        foreach(var selectedToggle in objTxtColorToggle) {
+            if(selectedToggle.isOn) {
+                
+                int color = int.Parse((selectedToggle.name).Substring(0, 1));
+                (Objectives.transform.Find("Text").GetComponent<Text>()).color = new Color(objTxtColors[color, 0], objTxtColors[color, 1], objTxtColors[color, 2]);
+            }
+        }
     }
 }

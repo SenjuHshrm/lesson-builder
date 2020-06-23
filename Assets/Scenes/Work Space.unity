@@ -1987,7 +1987,7 @@ GameObject:
   - component: {fileID: 324063395}
   - component: {fileID: 324063396}
   m_Layer: 5
-  m_Name: Toggle (3)
+  m_Name: 3-Blue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2058,7 +2058,18 @@ MonoBehaviour:
   m_Group: {fileID: 1724694288}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 968928653}
+        m_MethodName: changeObjectiveTextColor
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1 &327705504
 GameObject:
@@ -5736,7 +5747,7 @@ GameObject:
   - component: {fileID: 937216889}
   - component: {fileID: 937216890}
   m_Layer: 5
-  m_Name: Toggle (1)
+  m_Name: 1-Gray
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5807,7 +5818,18 @@ MonoBehaviour:
   m_Group: {fileID: 1724694288}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 968928653}
+        m_MethodName: changeObjectiveTextColor
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1 &947399633
 GameObject:
@@ -6071,6 +6093,7 @@ MonoBehaviour:
   totalScene: {fileID: 1024583252}
   currentScene: {fileID: 284392841}
   ObjTxtColor: {fileID: 1724694288}
+  Objectives: {fileID: 2830476}
 --- !u!1 &988576017
 GameObject:
   m_ObjectHideFlags: 0
@@ -6082,7 +6105,7 @@ GameObject:
   - component: {fileID: 988576018}
   - component: {fileID: 988576019}
   m_Layer: 5
-  m_Name: Toggle
+  m_Name: 0-Black
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6153,7 +6176,18 @@ MonoBehaviour:
   m_Group: {fileID: 1724694288}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 968928653}
+        m_MethodName: changeObjectiveTextColor
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
 --- !u!1 &999966807
 GameObject:
@@ -6239,7 +6273,7 @@ GameObject:
   - component: {fileID: 1019165335}
   - component: {fileID: 1019165336}
   m_Layer: 5
-  m_Name: Toggle (4)
+  m_Name: 4-Red
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6310,7 +6344,18 @@ MonoBehaviour:
   m_Group: {fileID: 1724694288}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 968928653}
+        m_MethodName: changeObjectiveTextColor
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1 &1024583250
 GameObject:
@@ -6936,7 +6981,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1182484196}
   m_TextComponent: {fileID: 1656406073}
   m_Placeholder: {fileID: 0}
@@ -10760,7 +10805,7 @@ GameObject:
   - component: {fileID: 1898026389}
   - component: {fileID: 1898026390}
   m_Layer: 5
-  m_Name: Toggle (2)
+  m_Name: 2-Yellow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10831,7 +10876,18 @@ MonoBehaviour:
   m_Group: {fileID: 1724694288}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 968928653}
+        m_MethodName: changeObjectiveTextColor
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1 &1912023992
 GameObject:
