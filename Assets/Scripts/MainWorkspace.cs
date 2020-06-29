@@ -23,7 +23,8 @@ public class MainWorkspace : MonoBehaviour
         {0.16f, 0.32f, 0.55f},
         {0.49f, 0f, 0f}
     };
-    public SceneClass scenes;
+    public List<SceneClass.SceneList> scnLs = new List<SceneClass.SceneList>();
+    public int selectedScene;
 
     // Start is called before the first frame update
     void Start()
@@ -31,10 +32,28 @@ public class MainWorkspace : MonoBehaviour
         functionTogglers("screenshot");
         functionTogglers("drawing");
         functionTogglers("story");
-        scenes = new SceneClass();
-        var sceneList = new List<SceneClass.SceneList[]>();
-        
-        
+        // SceneClass.SceneList sL1 = new SceneClass.SceneList() {
+        //     SceneNumber = 1,
+        //     IsSelected = true,
+        //     Background = "",
+        //     BoardTitle = "",
+        //     TitleColor = "",
+        //     ContentColor = "",
+        //     BoardTitleAnimation = "",
+        //     BoardAnimation = "",
+        //     Title = "",
+        //     Board = "",
+        //     Assets = {},
+        //     Screenshot = false,
+        //     Drawing = false,
+        //     Story = false,
+        //     MultipleChoice = false,
+        //     Enumeration = false,
+        //     MatchingType = false,
+        //     FillInTheBlank = false,
+        //     Essay = false
+        // };
+        // scnLs.Add(sL1);
     }
 
     // Update is called once per frame
@@ -57,11 +76,31 @@ public class MainWorkspace : MonoBehaviour
     }
 
     public void addScene() {
-        GameObject nScnTmbCon = (GameObject)Instantiate(sceneTmbContainer);
-        RectTransform rt = (RectTransform)nScnTmbCon.transform;
-        float wdt = rt.rect.width;
-        float ht = rt.rect.height + 300f;
-        rt.sizeDelta = new Vector2(wdt, ht);
+        RectTransform rt = (RectTransform)sceneTmbContainer.transform;
+        rt.sizeDelta = new Vector2(rt.sizeDelta.x, rt.sizeDelta.y + 100f);
+        // int ln = scnLs.Count;
+        // SceneClass.SceneList sL1 = new SceneClass.SceneList() {
+        //     SceneNumber = ln + 1,
+        //     IsSelected = true,
+        //     Background = "",
+        //     BoardTitle = "",
+        //     TitleColor = "",
+        //     ContentColor = "",
+        //     BoardTitleAnimation = "",
+        //     BoardAnimation = "",
+        //     Title = "",
+        //     Board = "",
+        //     Assets = {},
+        //     Screenshot = false,
+        //     Drawing = false,
+        //     Story = false,
+        //     MultipleChoice = false,
+        //     Enumeration = false,
+        //     MatchingType = false,
+        //     FillInTheBlank = false,
+        //     Essay = false
+        // };
+        // scnLs.Add(sL1);
     }
 
     public void saveScene() {
@@ -69,7 +108,11 @@ public class MainWorkspace : MonoBehaviour
     }
 
     public void deleteScene() {
-        
+        RectTransform rt = (RectTransform)sceneTmbContainer.transform;
+        float size = rt.sizeDelta.y - 100f;
+        if(size < rt.sizeDelta.y) {
+           rt.sizeDelta = new Vector2(rt.sizeDelta.x, size); 
+        }
     }
 
     public void changeObjectiveTextColor(int x) {
@@ -160,38 +203,34 @@ public class MainWorkspace : MonoBehaviour
             sl.gameObject.transform.Find("Handle Slide Area").Find("Handle").GetComponent<Image>().color = new Color(0f, 0.38f, 0f, 1f); 
         }
     }
+
 }
 
 namespace SceneClassHolder {
     public class SceneClass {
         public class SceneList {
-            public int SceneNumber = 1;
-            public bool IsSelected = true;
-            public class Properties {
-                public class Scene {
-                    public string Background = "";
-                    public string BoardTitle = "";
-                    public string TitleColor = "";
-                    public string ContentColor = "";
-                    public string BoardTitleAnimation = "";
-                    public string BoardAnimation = "";
-                    public string Title = "";
-                    public string Board = "";
-                    public string[] Assets = {};
-                }
-                public class Functions {
-                    public bool Screenshot = false;
-                    public bool Drawing = false;
-                    public bool Story = false;
-                }
-                public class Assessment {
-                    public bool MultipleChoice = false;
-                    public bool Enumeration = false;
-                    public bool MatchingType = false;
-                    public bool FillInTheBlank = false;
-                    public bool Essay = false;
-                }
-            }
+            public int SceneNumber { get; set; }
+            public bool IsSelected { get; set; }
+            //Scene
+            public string Background { get; set; }
+            public string BoardTitle { get; set; }
+            public string TitleColor { get; set; }
+            public string ContentColor { get; set; }
+            public string BoardTitleAnimation { get; set; }
+            public string BoardAnimation { get; set; }
+            public string Title { get; set; }
+            public string Board { get; set; }
+            public string[] Assets { get; set; }
+            //Functions
+            public bool Screenshot { get; set; }
+            public bool Drawing { get; set; }
+            public bool Story { get; set; }
+            //Assessment
+            public bool MultipleChoice { get; set; }
+            public bool Enumeration { get; set; }
+            public bool MatchingType { get; set; }
+            public bool FillInTheBlank { get; set; }
+            public bool Essay { get; set; }
         };
-}
+    }
 }
