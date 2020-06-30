@@ -16,6 +16,8 @@ public class MainWorkspace : MonoBehaviour
     public Scrollbar inspScroll;
     public Slider screenshot, drawing, story;
     public GameObject sceneWndF,sceneWndM, sceneWndL, sceneTmbF, sceneTmbM, sceneTmbL, sceneTmbContainer;
+    public GameObject objCon, sceneCon, asmtCon;
+    public Image objToggler, sceneToggler, asmtToggler;
     public float[,] objTxtColors = new float[,] {
         {0.01f, 0.01f, 0.01f},
         {0.44f, 0.44f, 0.44f},
@@ -32,28 +34,28 @@ public class MainWorkspace : MonoBehaviour
         functionTogglers("screenshot");
         functionTogglers("drawing");
         functionTogglers("story");
-        // SceneClass.SceneList sL1 = new SceneClass.SceneList() {
-        //     SceneNumber = 1,
-        //     IsSelected = true,
-        //     Background = "",
-        //     BoardTitle = "",
-        //     TitleColor = "",
-        //     ContentColor = "",
-        //     BoardTitleAnimation = "",
-        //     BoardAnimation = "",
-        //     Title = "",
-        //     Board = "",
-        //     Assets = {},
-        //     Screenshot = false,
-        //     Drawing = false,
-        //     Story = false,
-        //     MultipleChoice = false,
-        //     Enumeration = false,
-        //     MatchingType = false,
-        //     FillInTheBlank = false,
-        //     Essay = false
-        // };
-        // scnLs.Add(sL1);
+        SceneClass.SceneList sL1 = new SceneClass.SceneList() {
+            SceneNumber = 1,
+            IsSelected = true,
+            Background = "",
+            BoardTitle = "",
+            TitleColor = "",
+            ContentColor = "",
+            BoardTitleAnimation = "",
+            BoardAnimation = "",
+            Title = "",
+            Board = "",
+            Assets = {},
+            Screenshot = false,
+            Drawing = false,
+            Story = false,
+            MultipleChoice = false,
+            Enumeration = false,
+            MatchingType = false,
+            FillInTheBlank = false,
+            Essay = false
+        };
+        scnLs.Add(sL1);
     }
 
     // Update is called once per frame
@@ -78,29 +80,29 @@ public class MainWorkspace : MonoBehaviour
     public void addScene() {
         RectTransform rt = (RectTransform)sceneTmbContainer.transform;
         rt.sizeDelta = new Vector2(rt.sizeDelta.x, rt.sizeDelta.y + 100f);
-        // int ln = scnLs.Count;
-        // SceneClass.SceneList sL1 = new SceneClass.SceneList() {
-        //     SceneNumber = ln + 1,
-        //     IsSelected = true,
-        //     Background = "",
-        //     BoardTitle = "",
-        //     TitleColor = "",
-        //     ContentColor = "",
-        //     BoardTitleAnimation = "",
-        //     BoardAnimation = "",
-        //     Title = "",
-        //     Board = "",
-        //     Assets = {},
-        //     Screenshot = false,
-        //     Drawing = false,
-        //     Story = false,
-        //     MultipleChoice = false,
-        //     Enumeration = false,
-        //     MatchingType = false,
-        //     FillInTheBlank = false,
-        //     Essay = false
-        // };
-        // scnLs.Add(sL1);
+        int ln = scnLs.Count;
+        SceneClass.SceneList sL1 = new SceneClass.SceneList() {
+            SceneNumber = ln + 1,
+            IsSelected = true,
+            Background = "",
+            BoardTitle = "",
+            TitleColor = "",
+            ContentColor = "",
+            BoardTitleAnimation = "",
+            BoardAnimation = "",
+            Title = "",
+            Board = "",
+            Assets = {},
+            Screenshot = false,
+            Drawing = false,
+            Story = false,
+            MultipleChoice = false,
+            Enumeration = false,
+            MatchingType = false,
+            FillInTheBlank = false,
+            Essay = false
+        };
+        scnLs.Add(sL1);
     }
 
     public void saveScene() {
@@ -110,8 +112,10 @@ public class MainWorkspace : MonoBehaviour
     public void deleteScene() {
         RectTransform rt = (RectTransform)sceneTmbContainer.transform;
         float size = rt.sizeDelta.y - 100f;
-        if(size < rt.sizeDelta.y) {
-           rt.sizeDelta = new Vector2(rt.sizeDelta.x, size); 
+        int sceneSize = scnLs.Count;
+        if(sceneSize > 1) {
+           rt.sizeDelta = new Vector2(rt.sizeDelta.x, size);
+           scnLs.RemoveAt(sceneSize - 1);
         }
     }
 
@@ -201,6 +205,39 @@ public class MainWorkspace : MonoBehaviour
             txt.text = "ON";
             sl.gameObject.transform.Find("Fill Area").Find("Fill").GetComponent<Image>().color = new Color(0f, 0.38f, 0f, 1f);
             sl.gameObject.transform.Find("Handle Slide Area").Find("Handle").GetComponent<Image>().color = new Color(0f, 0.38f, 0f, 1f); 
+        }
+    }
+
+    public void toggleObjective() {
+        Animator animCn = objCon.GetComponent<Animator>(),
+                animTglr = objToggler.GetComponent<Animator>();
+        if(animCn != null && animTglr != null) {
+            bool cnIsOpen = animCn.GetBool("open"),
+                tglrIsOpen = animTglr.GetBool("open");
+            animCn.SetBool("open", !cnIsOpen);
+            animTglr.SetBool("open", !tglrIsOpen);
+        }
+    }
+
+    public void toggleScene() {
+        Animator animCn = sceneCon.GetComponent<Animator>(),
+                animTglr = sceneToggler.GetComponent<Animator>();
+        if(animCn != null) {
+            bool cnIsOpen = animCn.GetBool("open"),
+                tglrIsOpen = animTglr.GetBool("open");
+            animCn.SetBool("open", !cnIsOpen);
+            animTglr.SetBool("open", !tglrIsOpen);
+        }
+    }
+
+    public void toggleAsmt() {
+        Animator animCn = asmtCon.GetComponent<Animator>(),
+                animTglr = asmtToggler.GetComponent<Animator>();
+        if(animCn != null) {
+            bool cnIsOpen = animCn.GetBool("open"),
+                tglrIsOpen = animTglr.GetBool("open");
+            animCn.SetBool("open", !cnIsOpen);
+            animTglr.SetBool("open", !tglrIsOpen);
         }
     }
 
