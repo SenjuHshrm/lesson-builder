@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SceneClassHolder;
@@ -15,7 +16,7 @@ public class MainWorkspace : MonoBehaviour
     public InputField Objectives, title, board;
     public Scrollbar inspScroll;
     public Slider screenshot, drawing, story;
-    public GameObject sceneWndF,sceneWndM, sceneWndL, sceneTmbF, sceneTmbM, sceneTmbL, sceneTmbContainer;
+    public GameObject sceneWnd, sceneTmb, sceneTmbContainer;
     public GameObject objCon, sceneCon, asmtCon;
     public Image objToggler, sceneToggler, asmtToggler;
     public float[,] objTxtColors = new float[,] {
@@ -27,6 +28,7 @@ public class MainWorkspace : MonoBehaviour
     };
     public List<SceneClass.SceneList> scnLs = new List<SceneClass.SceneList>();
     public int selectedScene;
+    public float yAxis = -533.8f;
 
     // Start is called before the first frame update
     void Start()
@@ -56,6 +58,10 @@ public class MainWorkspace : MonoBehaviour
             Essay = false
         };
         scnLs.Add(sL1);
+        Transform tmbCon = (Transform)sceneTmbContainer.transform;
+        GameObject tmb = (GameObject)Instantiate(sceneTmb, new Vector3(-533.8f, 203.8f, 0f), Quaternion.identity);
+        tmb.transform.SetParent(tmbCon, false);
+        totalScene.text = (1).ToString();
     }
 
     // Update is called once per frame
@@ -103,6 +109,11 @@ public class MainWorkspace : MonoBehaviour
             Essay = false
         };
         scnLs.Add(sL1);
+        yAxis = yAxis - 151.62f;
+        Transform con = (Transform)sceneTmbContainer.transform;
+        GameObject tmb = (GameObject)Instantiate(sceneTmb, new Vector3(-533.8f, yAxis, 0f), Quaternion.identity);
+        tmb.transform.SetParent(con, false);
+        totalScene.text = (ln + 1).ToString();
     }
 
     public void saveScene() {
@@ -116,6 +127,7 @@ public class MainWorkspace : MonoBehaviour
         if(sceneSize > 1) {
            rt.sizeDelta = new Vector2(rt.sizeDelta.x, size);
            scnLs.RemoveAt(sceneSize - 1);
+           totalScene.text = (sceneSize - 1).ToString();
         }
     }
 
@@ -130,6 +142,14 @@ public class MainWorkspace : MonoBehaviour
         } else {
             (inspScroll.GetComponent<CanvasGroup>()).alpha = 1f;
         }
+    }
+
+    public void addAsset() {
+
+    }
+
+    public void openFileDlg() {
+        string path = EditorUtility.OpenFilePanel("Select asset to use", "", "png");
     }
 
     public void openObjctvBoardChooser() {
