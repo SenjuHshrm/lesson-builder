@@ -154,48 +154,56 @@ public class MainWorkspace : MonoBehaviour
 
     public void openObjctvBoardChooser() {
         objctvBoard.alpha = 1;
+        objctvBoard.blocksRaycasts = true;
         popUpOverlay.alpha = 1;
         popUpOverlay.blocksRaycasts = true;
     }
 
     public void chooseObjectiveBoard() {
         objctvBoard.alpha = 0;
+        objctvBoard.blocksRaycasts = false;
         popUpOverlay.alpha = 0;
         popUpOverlay.blocksRaycasts = false;
     }
 
     public void openSceneBg() {
         sceneBg.alpha = 1;
+        sceneBg.blocksRaycasts = true;
         popUpOverlay.alpha = 1;
         popUpOverlay.blocksRaycasts = true;
     }
 
     public void chooseSceneBg() {
         sceneBg.alpha = 0;
+        sceneBg.blocksRaycasts = false;
         popUpOverlay.alpha = 0;
         popUpOverlay.blocksRaycasts = false;
     }
 
     public void openTitleBoard() {
         titleBoard.alpha = 1;
+        titleBoard.blocksRaycasts = true;
         popUpOverlay.alpha = 1;
         popUpOverlay.blocksRaycasts = true;
     }
 
     public void chooseTitleBoard() {
         titleBoard.alpha = 0;
+        titleBoard.blocksRaycasts = false;
         popUpOverlay.alpha = 0;
         popUpOverlay.blocksRaycasts = false;
     }
 
     public void openContentBoard() {
         contentBoard.alpha = 1;
+        contentBoard.blocksRaycasts = true;
         popUpOverlay.alpha = 1;
         popUpOverlay.blocksRaycasts = true;
     }
 
     public void chooseContentBoard() {
         contentBoard.alpha = 0;
+        contentBoard.blocksRaycasts = false;
         popUpOverlay.alpha = 0;
         popUpOverlay.blocksRaycasts = false;
     }
