@@ -11,9 +11,9 @@ using SceneClassHolder;
 public class MainWorkspace : MonoBehaviour
 {
     public Text totalScene, currentScene, screenshotTxt, drawingTxt, storyTxt;
-    public ToggleGroup ObjTxtColor, titleTxtColor, contentTxtColor;
+    public ToggleGroup ObjTxtColor, titleTxtColor, contentTxtColor, ObjBoard, BackgroundImg, TitleBoard, ContentBoard;
     public CanvasGroup popUpOverlay, objctvBoard, sceneBg, titleBoard, contentBoard;
-    public InputField Objectives, title, board;
+    public InputField Objectives, ObjBoardCh, title, board, BgCh, BoardTitleCh, BoardCh;
     public Scrollbar inspScroll;
     public Slider screenshot, drawing, story;
     public GameObject sceneWnd, sceneTmb, sceneTmbContainer;
@@ -61,7 +61,7 @@ public class MainWorkspace : MonoBehaviour
         Transform tmbCon = (Transform)sceneTmbContainer.transform;
         GameObject tmb = (GameObject)Instantiate(sceneTmb, new Vector3(-533.8f, 203.8f, 0f), Quaternion.identity);
         tmb.transform.SetParent(tmbCon, false);
-        totalScene.text = (1).ToString();
+        totalScene.text = "1";
     }
 
     // Update is called once per frame
@@ -160,6 +160,11 @@ public class MainWorkspace : MonoBehaviour
     }
 
     public void chooseObjectiveBoard() {
+        foreach(var toggle in ObjBoard.ActiveToggles()) {
+            if(toggle.isOn) {
+                ObjBoardCh.text = toggle.name;
+            }
+        }
         objctvBoard.alpha = 0;
         objctvBoard.blocksRaycasts = false;
         popUpOverlay.alpha = 0;
@@ -174,6 +179,11 @@ public class MainWorkspace : MonoBehaviour
     }
 
     public void chooseSceneBg() {
+        foreach(var toggle in BackgroundImg.ActiveToggles()) {
+            if(toggle.isOn) {
+                BgCh.text = toggle.name;
+            }
+        }
         sceneBg.alpha = 0;
         sceneBg.blocksRaycasts = false;
         popUpOverlay.alpha = 0;
@@ -188,6 +198,11 @@ public class MainWorkspace : MonoBehaviour
     }
 
     public void chooseTitleBoard() {
+        foreach(var toggle in TitleBoard.ActiveToggles()) {
+            if(toggle.isOn) {
+                BoardTitleCh.text = toggle.name;
+            }
+        }
         titleBoard.alpha = 0;
         titleBoard.blocksRaycasts = false;
         popUpOverlay.alpha = 0;
@@ -202,6 +217,11 @@ public class MainWorkspace : MonoBehaviour
     }
 
     public void chooseContentBoard() {
+        foreach(var toggle in ContentBoard.ActiveToggles()) {
+            if(toggle.isOn) {
+                BoardCh.text = toggle.name;
+            }
+        }
         contentBoard.alpha = 0;
         contentBoard.blocksRaycasts = false;
         popUpOverlay.alpha = 0;
