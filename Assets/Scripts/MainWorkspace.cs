@@ -11,12 +11,13 @@ using SceneClassHolder;
 public class MainWorkspace : MonoBehaviour
 {
     public Text totalScene, currentScene, screenshotTxt, drawingTxt, storyTxt;
-    public ToggleGroup ObjTxtColor, titleTxtColor, contentTxtColor, ObjBoard, BackgroundImg, TitleBoard, ContentBoard;
+    public Toggle SceneThumbnail;
+    public ToggleGroup sceneTmbContainer, ObjTxtColor, titleTxtColor, contentTxtColor, ObjBoard, BackgroundImg, TitleBoard, ContentBoard;
     public CanvasGroup popUpOverlay, objctvBoard, sceneBg, titleBoard, contentBoard;
     public InputField Objectives, ObjBoardCh, title, board, BgCh, BoardTitleCh, BoardCh;
     public Scrollbar inspScroll;
     public Slider screenshot, drawing, story;
-    public GameObject sceneWnd, sceneTmb, sceneTmbContainer;
+    public GameObject sceneWnd, sceneTmb;
     public GameObject objCon, sceneCon, asmtCon;
     public Image objToggler, sceneToggler, asmtToggler;
     public float[,] objTxtColors = new float[,] {
@@ -29,6 +30,7 @@ public class MainWorkspace : MonoBehaviour
     public List<SceneClass.SceneList> scnLs = new List<SceneClass.SceneList>();
     public int selectedScene;
     public float yAxis = -533.8f;
+    public int generatedSlides = 1;
 
     // Start is called before the first frame update
     void Start()
@@ -58,9 +60,9 @@ public class MainWorkspace : MonoBehaviour
             Essay = false
         };
         scnLs.Add(sL1);
-        Transform tmbCon = (Transform)sceneTmbContainer.transform;
-        GameObject tmb = (GameObject)Instantiate(sceneTmb, new Vector3(-533.8f, 203.8f, 0f), Quaternion.identity);
-        tmb.transform.SetParent(tmbCon, false);
+        // Transform tmbCon = (Transform)sceneTmbContainer.transform;
+        // GameObject tmb = (GameObject)Instantiate(sceneTmb, new Vector3(-533.8f, 203.8f, 0f), Quaternion.identity);
+        // tmb.transform.SetParent(tmbCon, false);
         totalScene.text = "1";
     }
 
@@ -84,8 +86,6 @@ public class MainWorkspace : MonoBehaviour
     }
 
     public void addScene() {
-        RectTransform rt = (RectTransform)sceneTmbContainer.transform;
-        rt.sizeDelta = new Vector2(rt.sizeDelta.x, rt.sizeDelta.y + 100f);
         int ln = scnLs.Count;
         SceneClass.SceneList sL1 = new SceneClass.SceneList() {
             SceneNumber = ln + 1,
@@ -109,10 +109,15 @@ public class MainWorkspace : MonoBehaviour
             Essay = false
         };
         scnLs.Add(sL1);
-        yAxis = yAxis - 151.62f;
-        Transform con = (Transform)sceneTmbContainer.transform;
-        GameObject tmb = (GameObject)Instantiate(sceneTmb, new Vector3(-533.8f, yAxis, 0f), Quaternion.identity);
-        tmb.transform.SetParent(con, false);
+        generatedSlides += 1;
+        Transform slideCon = (Transform)sceneTmbContainer.transform;
+        Toggle tmb = (Toggle)Instantiate(SceneThumbnail);
+        tmb.isOn = false;
+        tmb.group = sceneTmbContainer;
+        tmb.transform.SetParent(slideCon, false);
+        Transform t = tmb.transform.GetChild(2);
+        Text txt = t.GetComponent<Text>();
+        txt.text = "Scene " + (generatedSlides).ToString();
         totalScene.text = (ln + 1).ToString();
     }
 
@@ -121,11 +126,27 @@ public class MainWorkspace : MonoBehaviour
     }
 
     public void deleteScene() {
-        RectTransform rt = (RectTransform)sceneTmbContainer.transform;
-        float size = rt.sizeDelta.y - 100f;
         int sceneSize = scnLs.Count;
         if(sceneSize > 1) {
-           rt.sizeDelta = new Vector2(rt.sizeDelta.x, size);
+            Toggle[] currToggle = sceneTmbContainer.GetComponentsInChildren<Toggle>();
+            for(int i = 0; i < currToggle.Length; i++) {
+                if(currToggle[i].isOn) {
+                    Destroy(currToggle[i].gameObject);
+                    if(i == 0) {
+                        currToggle[0].isOn = true;
+                    } else {
+                        currToggle[i-1].isOn = true;
+                    }
+                    break;
+                }
+            }
+            Toggle[] newToggle = sceneTmbContainer.GetComponentsInChildren<Toggle>();
+            for(int i = 0; i < newToggle.Length; i++) {
+                Transform t = newToggle[i].transform.GetChild(2);
+                Text txt = t.GetComponent<Text>();
+                txt.text = "Scene " + (i + 1).ToString();
+            }
+            generatedSlides -= 1;
            scnLs.RemoveAt(sceneSize - 1);
            totalScene.text = (sceneSize - 1).ToString();
         }
