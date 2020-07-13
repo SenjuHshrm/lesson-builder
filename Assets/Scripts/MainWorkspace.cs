@@ -17,8 +17,7 @@ public class MainWorkspace : MonoBehaviour
     public InputField Objectives, ObjBoardCh, title, board, BgCh, BoardTitleCh, BoardCh;
     public Scrollbar inspScroll;
     public Slider screenshot, drawing, story;
-    public GameObject sceneWnd, sceneTmb;
-    public GameObject objCon, sceneCon, asmtCon;
+    public GameObject objCon, sceneCon, asmtCon, sceneWnd;
     public Image objToggler, sceneToggler, asmtToggler;
     public float[,] objTxtColors = new float[,] {
         {0.01f, 0.01f, 0.01f},
@@ -39,6 +38,7 @@ public class MainWorkspace : MonoBehaviour
         functionTogglers("drawing");
         functionTogglers("story");
         SceneClass.SceneList sL1 = new SceneClass.SceneList() {
+            SceneContainer = sceneWnd,
             SceneNumber = 1,
             IsSelected = true,
             Background = "",
@@ -60,9 +60,6 @@ public class MainWorkspace : MonoBehaviour
             Essay = false
         };
         scnLs.Add(sL1);
-        // Transform tmbCon = (Transform)sceneTmbContainer.transform;
-        // GameObject tmb = (GameObject)Instantiate(sceneTmb, new Vector3(-533.8f, 203.8f, 0f), Quaternion.identity);
-        // tmb.transform.SetParent(tmbCon, false);
         totalScene.text = "1";
     }
 
@@ -88,6 +85,7 @@ public class MainWorkspace : MonoBehaviour
     public void addScene() {
         int ln = scnLs.Count;
         SceneClass.SceneList sL1 = new SceneClass.SceneList() {
+            SceneContainer = sceneWnd,
             SceneNumber = ln + 1,
             IsSelected = true,
             Background = "",
@@ -129,9 +127,11 @@ public class MainWorkspace : MonoBehaviour
         int sceneSize = scnLs.Count;
         if(sceneSize > 1) {
             Toggle[] currToggle = sceneTmbContainer.GetComponentsInChildren<Toggle>();
-            for(int i = 0; i < currToggle.Length; i++) {
-                if(currToggle[i].isOn) {
-                    Destroy(currToggle[i].gameObject);
+            List<Toggle> toggleLs = new List<Toggle>(currToggle);
+            for(int i = 0; i < toggleLs.Count; i++) {
+                if(toggleLs[i].isOn) {
+                    Destroy(toggleLs[i].gameObject);
+                    toggleLs.RemoveAt(i);
                     if(i == 0) {
                         currToggle[0].isOn = true;
                     } else {
@@ -140,9 +140,9 @@ public class MainWorkspace : MonoBehaviour
                     break;
                 }
             }
-            Toggle[] newToggle = sceneTmbContainer.GetComponentsInChildren<Toggle>();
-            for(int i = 0; i < newToggle.Length; i++) {
-                Transform t = newToggle[i].transform.GetChild(2);
+            currToggle = toggleLs.ToArray();
+            for(int i = 0; i < currToggle.Length; i++) {
+                Transform t = currToggle[i].transform.GetChild(2);
                 Text txt = t.GetComponent<Text>();
                 txt.text = "Scene " + (i + 1).ToString();
             }
@@ -315,6 +315,7 @@ public class MainWorkspace : MonoBehaviour
 namespace SceneClassHolder {
     public class SceneClass {
         public class SceneList {
+            public GameObject SceneContainer { get; set; }
             public int SceneNumber { get; set; }
             public bool IsSelected { get; set; }
             //Scene
