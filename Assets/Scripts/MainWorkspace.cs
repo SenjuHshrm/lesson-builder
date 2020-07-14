@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using UnityEditor;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -13,11 +14,11 @@ public class MainWorkspace : MonoBehaviour
     public Text totalScene, currentScene, screenshotTxt, drawingTxt, storyTxt;
     public Toggle SceneThumbnail;
     public ToggleGroup sceneTmbContainer, ObjTxtColor, titleTxtColor, contentTxtColor, ObjBoard, BackgroundImg, TitleBoard, ContentBoard;
-    public CanvasGroup popUpOverlay, objctvBoard, sceneBg, titleBoard, contentBoard;
+    public CanvasGroup popUpOverlay, objctvBoard, sceneBg, titleBoard, contentBoard, deleteSceneWarn;
     public InputField Objectives, ObjBoardCh, title, board, BgCh, BoardTitleCh, BoardCh;
     public Scrollbar inspScroll;
     public Slider screenshot, drawing, story;
-    public GameObject objCon, sceneCon, asmtCon, sceneWnd;
+    public GameObject objCon, sceneCon, asmtCon, sceneWnd, sceneWndCon;
     public Image objToggler, sceneToggler, asmtToggler;
     public float[,] objTxtColors = new float[,] {
         {0.01f, 0.01f, 0.01f},
@@ -38,7 +39,7 @@ public class MainWorkspace : MonoBehaviour
         functionTogglers("drawing");
         functionTogglers("story");
         SceneClass.SceneList sL1 = new SceneClass.SceneList() {
-            SceneContainer = sceneWnd,
+            SceneContainer = null,
             SceneNumber = 1,
             IsSelected = true,
             Background = "",
@@ -61,6 +62,13 @@ public class MainWorkspace : MonoBehaviour
         };
         scnLs.Add(sL1);
         totalScene.text = "1";
+        currentScene.text = "1";
+        Transform scnCon = (Transform)sceneWndCon.transform;
+        GameObject scnWn = (GameObject)Instantiate(sceneWnd);
+        scnWn.transform.SetParent(scnCon, false);
+        Transform t = scnWn.transform.GetChild(3);
+        Button b = t.GetComponent<Button>(); 
+        b.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -85,7 +93,7 @@ public class MainWorkspace : MonoBehaviour
     public void addScene() {
         int ln = scnLs.Count;
         SceneClass.SceneList sL1 = new SceneClass.SceneList() {
-            SceneContainer = sceneWnd,
+            SceneContainer = null,
             SceneNumber = ln + 1,
             IsSelected = true,
             Background = "",
@@ -116,40 +124,89 @@ public class MainWorkspace : MonoBehaviour
         Transform t = tmb.transform.GetChild(2);
         Text txt = t.GetComponent<Text>();
         txt.text = "Scene " + (generatedSlides).ToString();
+        EventTrigger trg = tmb.GetComponent<EventTrigger>();
+        EventTrigger.Entry entr = new EventTrigger.Entry();
+        entr.eventID = EventTriggerType.PointerUp;
+        entr.callback.AddListener((_) => { selectScene((Text)txt); });
+        trg.triggers.Add(entr);
         totalScene.text = (ln + 1).ToString();
+
     }
 
     public void saveScene() {
+        
+    }
 
+    public void deleteSceneWarning() {
+        int sceneSize = scnLs.Count;
+        if(sceneSize > 1) {
+            popUpOverlay.alpha = 1;
+            popUpOverlay.blocksRaycasts = true;
+            deleteSceneWarn.alpha = 1;
+            deleteSceneWarn.blocksRaycasts = true;
+        }
     }
 
     public void deleteScene() {
         int sceneSize = scnLs.Count;
-        if(sceneSize > 1) {
-            Toggle[] currToggle = sceneTmbContainer.GetComponentsInChildren<Toggle>();
-            List<Toggle> toggleLs = new List<Toggle>(currToggle);
-            for(int i = 0; i < toggleLs.Count; i++) {
-                if(toggleLs[i].isOn) {
-                    Destroy(toggleLs[i].gameObject);
-                    toggleLs.RemoveAt(i);
-                    if(i == 0) {
-                        currToggle[0].isOn = true;
-                    } else {
-                        currToggle[i-1].isOn = true;
-                    }
-                    break;
+        Toggle[] currToggle = sceneTmbContainer.GetComponentsInChildren<Toggle>();
+        List<Toggle> toggleLs = new List<Toggle>(currToggle);
+        for(int i = 0; i < toggleLs.Count; i++) {
+            if(toggleLs[i].isOn) {
+                Destroy(toggleLs[i].gameObject);
+                toggleLs.RemoveAt(i);
+                if(i == 0) {
+                    currToggle[0].isOn = true;
+                } else {
+                    currToggle[i-1].isOn = true;
                 }
+                break;
             }
-            currToggle = toggleLs.ToArray();
-            for(int i = 0; i < currToggle.Length; i++) {
-                Transform t = currToggle[i].transform.GetChild(2);
-                Text txt = t.GetComponent<Text>();
-                txt.text = "Scene " + (i + 1).ToString();
-            }
-            generatedSlides -= 1;
-           scnLs.RemoveAt(sceneSize - 1);
-           totalScene.text = (sceneSize - 1).ToString();
         }
+        currToggle = toggleLs.ToArray();
+        for(int i = 0; i < currToggle.Length; i++) {
+            Transform t = currToggle[i].transform.GetChild(2);
+            Text txt = t.GetComponent<Text>();
+            txt.text = "Scene " + (i + 1).ToString();
+            if(currToggle[i].isOn) {
+                selectScene(txt);
+            }
+        }
+        generatedSlides -= 1;
+        scnLs.RemoveAt(sceneSize - 1);
+        totalScene.text = (sceneSize - 1).ToString();
+        exitWarning();
+    }
+
+    public void exitWarning() {
+        popUpOverlay.alpha = 0;
+        popUpOverlay.blocksRaycasts = false;
+        deleteSceneWarn.alpha = 0;
+        deleteSceneWarn.blocksRaycasts = false;
+    }
+
+    public void selectScene(Text txt) {
+        // Transform tr = (Transform)sceneWndCon.transform;
+        GameObject trScn = sceneWndCon.GetComponent<GameObject>();
+        Destroy(trScn.gameObject);
+        string str = txt.text;
+        string[] s = str.Split(' ');
+        currentScene.text = s[1];
+        int i = int.Parse(s[1]);
+        SceneClass.SceneList scn = scnLs[i-1];
+        // Transform scnCon = (Transform)sceneWndCon.transform;
+        // GameObject scnWn = (GameObject)Instantiate(sceneWnd);
+        // scnWn.transform.SetParent(scnCon, false);
+        // Transform t = null;
+        // if(i == 1) {
+        //     t = scnWn.transform.GetChild(3);
+        //     Button b = t.GetComponent<Button>(); 
+        //     b.gameObject.SetActive(false);
+        // } else if(i == scnLs.Count) {
+        //     t = scnWn.transform.GetChild(2);
+        //     Button b = t.GetComponent<Button>(); 
+        //     b.gameObject.SetActive(false);
+        // }
     }
 
     public void changeObjectiveTextColor(int x) {
