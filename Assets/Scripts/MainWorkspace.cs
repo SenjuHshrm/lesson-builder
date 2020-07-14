@@ -186,27 +186,27 @@ public class MainWorkspace : MonoBehaviour
     }
 
     public void selectScene(Text txt) {
-        // Transform tr = (Transform)sceneWndCon.transform;
-        GameObject trScn = sceneWndCon.GetComponent<GameObject>();
+        //Transform tr = (Transform)sceneWndCon.transform;
+        Transform trScn = sceneWndCon.transform.GetChild(0);
         Destroy(trScn.gameObject);
         string str = txt.text;
         string[] s = str.Split(' ');
         currentScene.text = s[1];
         int i = int.Parse(s[1]);
         SceneClass.SceneList scn = scnLs[i-1];
-        // Transform scnCon = (Transform)sceneWndCon.transform;
-        // GameObject scnWn = (GameObject)Instantiate(sceneWnd);
-        // scnWn.transform.SetParent(scnCon, false);
-        // Transform t = null;
-        // if(i == 1) {
-        //     t = scnWn.transform.GetChild(3);
-        //     Button b = t.GetComponent<Button>(); 
-        //     b.gameObject.SetActive(false);
-        // } else if(i == scnLs.Count) {
-        //     t = scnWn.transform.GetChild(2);
-        //     Button b = t.GetComponent<Button>(); 
-        //     b.gameObject.SetActive(false);
-        // }
+        Transform scnCon = (Transform)sceneWndCon.transform;
+        GameObject scnWn = (GameObject)Instantiate(sceneWnd);
+        scnWn.transform.SetParent(scnCon, false);
+        Transform t = null;
+        if(i == 1) {
+            t = scnWn.transform.GetChild(3);
+            Button b = t.GetComponent<Button>(); 
+            b.gameObject.SetActive(false);
+        } else if(i == scnLs.Count) {
+            t = scnWn.transform.GetChild(2);
+            Button b = t.GetComponent<Button>(); 
+            b.gameObject.SetActive(false);
+        }
     }
 
     public void changeObjectiveTextColor(int x) {

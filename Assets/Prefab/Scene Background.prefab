@@ -128,7 +128,6 @@ GameObject:
   - component: {fileID: 5789078444974899020}
   - component: {fileID: 4566903680680863383}
   - component: {fileID: 2114561413030674846}
-  - component: {fileID: -2263537505075953401}
   m_Layer: 5
   m_Name: Scene Background
   m_TagString: Untagged
@@ -195,18 +194,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!225 &-2263537505075953401
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2608532522046032594}
-  m_Enabled: 1
-  m_Alpha: 0
-  m_Interactable: 1
-  m_BlocksRaycasts: 0
-  m_IgnoreParentGroups: 0
 --- !u!1 &6383245993603097485
 GameObject:
   m_ObjectHideFlags: 0
