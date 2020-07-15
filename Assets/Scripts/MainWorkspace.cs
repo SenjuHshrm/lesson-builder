@@ -116,6 +116,13 @@ public class MainWorkspace : MonoBehaviour
         };
         scnLs.Add(sL1);
         generatedSlides += 1;
+        Transform trScn = sceneWndCon.transform.GetChild(0);
+        Destroy(trScn.gameObject);
+        Transform scnCon = (Transform)sceneWndCon.transform;
+        GameObject scnWn = (GameObject)Instantiate(sceneWnd);
+        scnWn.transform.SetParent(scnCon, false);
+        Transform trf = null;
+        
         Transform slideCon = (Transform)sceneTmbContainer.transform;
         Toggle tmb = (Toggle)Instantiate(SceneThumbnail);
         tmb.isOn = false;
@@ -130,11 +137,26 @@ public class MainWorkspace : MonoBehaviour
         entr.callback.AddListener((_) => { selectScene((Text)txt); });
         trg.triggers.Add(entr);
         totalScene.text = (ln + 1).ToString();
-
+        Toggle[] tgl = sceneTmbContainer.GetComponentsInChildren<Toggle>();
+        for(int i = 0; i < tgl.Length; i++) {
+            if(tgl[i].isOn) {
+                if(i == tgl.Length - 1) {
+                    trf = scnWn.transform.GetChild(2);
+                    Button b = trf.GetComponent<Button>(); 
+                    b.gameObject.SetActive(false);
+                } else if(i == 0) {
+                    trf = scnWn.transform.GetChild(3);
+                    Button b = trf.GetComponent<Button>(); 
+                    b.gameObject.SetActive(false);
+                }
+                
+            }
+        }
     }
 
     public void saveScene() {
-        
+        Toggle[] tgl = sceneTmbContainer.GetComponentsInChildren<Toggle>();
+
     }
 
     public void deleteSceneWarning() {
@@ -164,6 +186,9 @@ public class MainWorkspace : MonoBehaviour
             }
         }
         currToggle = toggleLs.ToArray();
+        generatedSlides -= 1;
+        scnLs.RemoveAt(sceneSize - 1);
+        totalScene.text = (sceneSize - 1).ToString();
         for(int i = 0; i < currToggle.Length; i++) {
             Transform t = currToggle[i].transform.GetChild(2);
             Text txt = t.GetComponent<Text>();
@@ -172,9 +197,6 @@ public class MainWorkspace : MonoBehaviour
                 selectScene(txt);
             }
         }
-        generatedSlides -= 1;
-        scnLs.RemoveAt(sceneSize - 1);
-        totalScene.text = (sceneSize - 1).ToString();
         exitWarning();
     }
 
@@ -186,7 +208,6 @@ public class MainWorkspace : MonoBehaviour
     }
 
     public void selectScene(Text txt) {
-        //Transform tr = (Transform)sceneWndCon.transform;
         Transform trScn = sceneWndCon.transform.GetChild(0);
         Destroy(trScn.gameObject);
         string str = txt.text;
