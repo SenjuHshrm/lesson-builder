@@ -290,6 +290,10 @@ public class MainWorkspace : MonoBehaviour
                 BgCh.text = toggle.name;
             }
         }
+        Sprite bg = Resources.Load<Sprite>("MyBackground/Background1");
+        Transform tr = sceneWndCon.transform.GetChild(0);
+        GameObject gobj = tr.gameObject;
+        gobj.GetComponent<Image>().sprite = bg;
         sceneBg.alpha = 0;
         sceneBg.blocksRaycasts = false;
         popUpOverlay.alpha = 0;
