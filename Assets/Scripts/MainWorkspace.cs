@@ -39,7 +39,7 @@ public class MainWorkspace : MonoBehaviour
         functionTogglers("drawing");
         functionTogglers("story");
         SceneClass.SceneList sL1 = new SceneClass.SceneList() {
-            SceneContainer = null,
+            SceneContainer = sceneWnd,
             SceneNumber = 1,
             IsSelected = true,
             Background = "",
@@ -93,7 +93,7 @@ public class MainWorkspace : MonoBehaviour
     public void addScene() {
         int ln = scnLs.Count;
         SceneClass.SceneList sL1 = new SceneClass.SceneList() {
-            SceneContainer = null,
+            SceneContainer = sceneWnd,
             SceneNumber = ln + 1,
             IsSelected = true,
             Background = "",
@@ -119,7 +119,7 @@ public class MainWorkspace : MonoBehaviour
         Transform trScn = sceneWndCon.transform.GetChild(0);
         Destroy(trScn.gameObject);
         Transform scnCon = (Transform)sceneWndCon.transform;
-        GameObject scnWn = (GameObject)Instantiate(sceneWnd);
+        GameObject scnWn = (GameObject)Instantiate(sL1.SceneContainer);
         scnWn.transform.SetParent(scnCon, false);
         Transform trf = null;
         
@@ -156,7 +156,14 @@ public class MainWorkspace : MonoBehaviour
 
     public void saveScene() {
         Toggle[] tgl = sceneTmbContainer.GetComponentsInChildren<Toggle>();
-
+        for(int i = 0; i < tgl.Length; i++) {
+            if(tgl[i].isOn) {
+                Transform tr = sceneWndCon.transform.GetChild(0);
+                scnLs[i].SceneContainer = tr.gameObject;
+                break;
+            }
+        }
+        
     }
 
     public void deleteSceneWarning() {
@@ -216,7 +223,7 @@ public class MainWorkspace : MonoBehaviour
         int i = int.Parse(s[1]);
         SceneClass.SceneList scn = scnLs[i-1];
         Transform scnCon = (Transform)sceneWndCon.transform;
-        GameObject scnWn = (GameObject)Instantiate(sceneWnd);
+        GameObject scnWn = (GameObject)Instantiate(scn.SceneContainer);
         scnWn.transform.SetParent(scnCon, false);
         Transform t = null;
         if(i == 1) {
