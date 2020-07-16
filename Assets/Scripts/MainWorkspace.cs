@@ -38,8 +38,33 @@ public class MainWorkspace : MonoBehaviour
         functionTogglers("screenshot");
         functionTogglers("drawing");
         functionTogglers("story");
+        initScene();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    public void initScene() {
+        totalScene.text = "1";
+        currentScene.text = "1";
+        //Scene
+        Transform scnCon = (Transform)sceneWndCon.transform;
+        GameObject scnWn = (GameObject)Instantiate(sceneWnd);
+        scnWn.transform.SetParent(scnCon, false);
+        Transform t = scnWn.transform.GetChild(3);
+        Button b = t.GetComponent<Button>(); 
+        b.gameObject.SetActive(false);
+        //Scene thumbnail
+        Transform scnTmb = (Transform)sceneTmbContainer.transform;
+        Toggle tmb = (Toggle)Instantiate(SceneThumbnail);
+        tmb.isOn = true;
+        tmb.group = sceneTmbContainer;
+        tmb.transform.SetParent(scnTmb, false);
         SceneClass.SceneList sL1 = new SceneClass.SceneList() {
-            SceneContainer = sceneWnd,
+            SceneContainer = scnWn,
             SceneNumber = 1,
             IsSelected = true,
             Background = "",
@@ -61,20 +86,6 @@ public class MainWorkspace : MonoBehaviour
             Essay = false
         };
         scnLs.Add(sL1);
-        totalScene.text = "1";
-        currentScene.text = "1";
-        Transform scnCon = (Transform)sceneWndCon.transform;
-        GameObject scnWn = (GameObject)Instantiate(sceneWnd);
-        scnWn.transform.SetParent(scnCon, false);
-        Transform t = scnWn.transform.GetChild(3);
-        Button b = t.GetComponent<Button>(); 
-        b.gameObject.SetActive(false);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     //Button onClick Event Handlers
@@ -290,7 +301,7 @@ public class MainWorkspace : MonoBehaviour
                 BgCh.text = toggle.name;
             }
         }
-        Sprite bg = Resources.Load<Sprite>("MyBackground/Background1");
+        Sprite bg = Resources.Load<Sprite>("MyBackground/" + BgCh.text);
         Transform tr = sceneWndCon.transform.GetChild(0);
         GameObject gobj = tr.gameObject;
         gobj.GetComponent<Image>().sprite = bg;
