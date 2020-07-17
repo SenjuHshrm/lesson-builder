@@ -1105,7 +1105,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 968928653}
+        - m_Target: {fileID: 968928654}
           m_MethodName: toggleObjective
           m_Mode: 1
           m_Arguments:
@@ -1759,7 +1759,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 968928653}
+        - m_Target: {fileID: 968928654}
           m_MethodName: functionTogglers
           m_Mode: 5
           m_Arguments:
@@ -7682,7 +7682,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 968928653}
+        - m_Target: {fileID: 968928654}
           m_MethodName: functionTogglers
           m_Mode: 5
           m_Arguments:
@@ -14729,7 +14729,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 968928653}
+        - m_Target: {fileID: 968928654}
           m_MethodName: functionTogglers
           m_Mode: 5
           m_Arguments:
@@ -17901,6 +17901,8 @@ GameObject:
   - component: {fileID: 968928649}
   - component: {fileID: 968928652}
   - component: {fileID: 968928653}
+  - component: {fileID: 968928654}
+  - component: {fileID: 968928655}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -17990,9 +17992,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   totalScene: {fileID: 1024583252}
   currentScene: {fileID: 284392841}
-  screenshotTxt: {fileID: 464386987}
-  drawingTxt: {fileID: 1380820503}
-  storyTxt: {fileID: 475589327}
   SceneThumbnail: {fileID: 8016929275751531991, guid: 4767501baadd2b74883f534bdd9120ad,
     type: 3}
   sceneTmbContainer: {fileID: 437736289}
@@ -18016,22 +18015,52 @@ MonoBehaviour:
   BgCh: {fileID: 236746742}
   BoardTitleCh: {fileID: 94385570}
   BoardCh: {fileID: 539086039}
-  inspScroll: {fileID: 0}
+  sceneWnd: {fileID: 2608532522046032594, guid: b2a68efecddc0c5498b0564abe901f0a,
+    type: 3}
+  sceneWndCon: {fileID: 1455855946}
+  animateObj: {fileID: 968928648}
+  wsFncObj: {fileID: 968928648}
+  selectedScene: 0
+  yAxis: -533.8
+  generatedSlides: 1
+  anim: {fileID: 0}
+  wsFnc: {fileID: 0}
+--- !u!114 &968928654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 968928648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f520c9b708b7fa428ac3ec3330b4276, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screenshotTxt: {fileID: 464386987}
+  drawingTxt: {fileID: 1380820503}
+  storyTxt: {fileID: 475589327}
   screenshot: {fileID: 784591722}
   drawing: {fileID: 100232349}
   story: {fileID: 441667754}
   objCon: {fileID: 1336378083}
   sceneCon: {fileID: 974812425}
   asmtCon: {fileID: 416001189}
-  sceneWnd: {fileID: 2608532522046032594, guid: b2a68efecddc0c5498b0564abe901f0a,
-    type: 3}
-  sceneWndCon: {fileID: 1455855946}
   objToggler: {fileID: 1721541249}
   sceneToggler: {fileID: 507206062}
   asmtToggler: {fileID: 1097926270}
-  selectedScene: 0
-  yAxis: -533.8
-  generatedSlides: 1
+--- !u!114 &968928655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 968928648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e397e5efa678ac4ebded32f4221dfcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &974756243
 GameObject:
   m_ObjectHideFlags: 0
@@ -20729,7 +20758,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 968928653}
+        - m_Target: {fileID: 968928654}
           m_MethodName: toggleScene
           m_Mode: 1
           m_Arguments:
@@ -32217,7 +32246,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 968928653}
+        - m_Target: {fileID: 968928654}
           m_MethodName: toggleAsmt
           m_Mode: 1
           m_Arguments:

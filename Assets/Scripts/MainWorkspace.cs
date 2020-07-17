@@ -11,15 +11,12 @@ using SceneClassHolder;
 
 public class MainWorkspace : MonoBehaviour
 {
-    public Text totalScene, currentScene, screenshotTxt, drawingTxt, storyTxt;
+    public Text totalScene, currentScene;
     public Toggle SceneThumbnail;
     public ToggleGroup sceneTmbContainer, ObjTxtColor, titleTxtColor, contentTxtColor, ObjBoard, BackgroundImg, TitleBoard, ContentBoard;
     public CanvasGroup popUpOverlay, objctvBoard, sceneBg, titleBoard, contentBoard, deleteSceneWarn;
     public InputField Objectives, ObjBoardCh, title, board, BgCh, BoardTitleCh, BoardCh;
-    public Scrollbar inspScroll;
-    public Slider screenshot, drawing, story;
-    public GameObject objCon, sceneCon, asmtCon, sceneWnd, sceneWndCon;
-    public Image objToggler, sceneToggler, asmtToggler;
+    public GameObject sceneWnd, sceneWndCon, animateObj, wsFncObj;
     public float[,] objTxtColors = new float[,] {
         {0.01f, 0.01f, 0.01f},
         {0.44f, 0.44f, 0.44f},
@@ -31,13 +28,16 @@ public class MainWorkspace : MonoBehaviour
     public int selectedScene;
     public float yAxis = -533.8f;
     public int generatedSlides = 1;
+    public Animations anim;
+    public WorkspaceFunctions wsFnc;
 
     // Start is called before the first frame update
     void Start()
     {
-        functionTogglers("screenshot");
-        functionTogglers("drawing");
-        functionTogglers("story");
+        anim = animateObj.GetComponent<Animations>();
+        anim.functionTogglers("screenshot");
+        anim.functionTogglers("drawing");
+        anim.functionTogglers("story");
         initScene();
     }
 
@@ -252,15 +252,6 @@ public class MainWorkspace : MonoBehaviour
         (Objectives.transform.Find("Text").GetComponent<Text>()).color = new Color(objTxtColors[x, 0], objTxtColors[x, 1], objTxtColors[x, 2], 1f);
     }
 
-    public void showInspScroll() {
-        float scllbr = (inspScroll.GetComponent<CanvasGroup>()).alpha;
-        if(scllbr == 1f) {
-            (inspScroll.GetComponent<CanvasGroup>()).alpha = 0f;
-        } else {
-            (inspScroll.GetComponent<CanvasGroup>()).alpha = 1f;
-        }
-    }
-
     public void addAsset() {
 
     }
@@ -349,66 +340,7 @@ public class MainWorkspace : MonoBehaviour
         popUpOverlay.blocksRaycasts = false;
     }
 
-    public void functionTogglers(string fnc) {
-        switch(fnc) {
-            case "screenshot":
-                switchState(screenshot, screenshot.value, screenshotTxt);
-                break;
-            case "drawing":
-                switchState(drawing, drawing.value, drawingTxt);
-                break;
-            case "story":
-                switchState(story, story.value, storyTxt);
-                break;
-        }
-    }
-
-    private void switchState(Slider sl, float state, Text txt) {
-        if(state == 1f) {
-            sl.value = 0f;
-            txt.text = "OFF";
-            sl.gameObject.transform.Find("Fill Area").Find("Fill").GetComponent<Image>().color = new Color(0.61f, 0.61f, 0.61f, 1f);
-            sl.gameObject.transform.Find("Handle Slide Area").Find("Handle").GetComponent<Image>().color = new Color(0.47f, 0.47f, 0.47f, 1f); 
-        } else {
-            sl.value = 1f;
-            txt.text = "ON";
-            sl.gameObject.transform.Find("Fill Area").Find("Fill").GetComponent<Image>().color = new Color(0f, 0.38f, 0f, 1f);
-            sl.gameObject.transform.Find("Handle Slide Area").Find("Handle").GetComponent<Image>().color = new Color(0f, 0.38f, 0f, 1f); 
-        }
-    }
-
-    public void toggleObjective() {
-        Animator animCn = objCon.GetComponent<Animator>(),
-                animTglr = objToggler.GetComponent<Animator>();
-        if(animCn != null && animTglr != null) {
-            bool cnIsOpen = animCn.GetBool("open"),
-                tglrIsOpen = animTglr.GetBool("open");
-            animCn.SetBool("open", !cnIsOpen);
-            animTglr.SetBool("open", !tglrIsOpen);
-        }
-    }
-
-    public void toggleScene() {
-        Animator animCn = sceneCon.GetComponent<Animator>(),
-                animTglr = sceneToggler.GetComponent<Animator>();
-        if(animCn != null) {
-            bool cnIsOpen = animCn.GetBool("open"),
-                tglrIsOpen = animTglr.GetBool("open");
-            animCn.SetBool("open", !cnIsOpen);
-            animTglr.SetBool("open", !tglrIsOpen);
-        }
-    }
-
-    public void toggleAsmt() {
-        Animator animCn = asmtCon.GetComponent<Animator>(),
-                animTglr = asmtToggler.GetComponent<Animator>();
-        if(animCn != null) {
-            bool cnIsOpen = animCn.GetBool("open"),
-                tglrIsOpen = animTglr.GetBool("open");
-            animCn.SetBool("open", !cnIsOpen);
-            animTglr.SetBool("open", !tglrIsOpen);
-        }
-    }
+    
 
 }
 
