@@ -35,6 +35,7 @@ public class MainWorkspace : MonoBehaviour
     void Start()
     {
         anim = animateObj.GetComponent<Animations>();
+        wsFnc = wsFncObj.GetComponent<WorkspaceFunctions>();
         anim.functionTogglers("screenshot");
         anim.functionTogglers("drawing");
         anim.functionTogglers("story");
@@ -50,23 +51,25 @@ public class MainWorkspace : MonoBehaviour
     public void initScene() {
         totalScene.text = "1";
         currentScene.text = "1";
-        //Scene
+        // //Scene
+        // Transform scnCon = (Transform)sceneWndCon.transform;
+        // GameObject scnWn = (GameObject)Instantiate(sceneWnd);
+        // scnWn.transform.SetParent(scnCon, false);
+        // Transform t = scnWn.transform.GetChild(3);
+        // Button b = t.GetComponent<Button>(); 
+        // b.gameObject.SetActive(false);
+        // //Scene thumbnail
+        // Transform scnTmb = (Transform)sceneTmbContainer.transform;
+        // Toggle tmb = (Toggle)Instantiate(SceneThumbnail);
+        // tmb.isOn = true;
+        // tmb.group = sceneTmbContainer;
+        // tmb.transform.SetParent(scnTmb, false);
+
         Transform scnCon = (Transform)sceneWndCon.transform;
-        GameObject scnWn = (GameObject)Instantiate(sceneWnd);
-        scnWn.transform.SetParent(scnCon, false);
-        Transform t = scnWn.transform.GetChild(3);
-        Button b = t.GetComponent<Button>(); 
-        b.gameObject.SetActive(false);
-        //Scene thumbnail
-        Transform scnTmb = (Transform)sceneTmbContainer.transform;
-        Toggle tmb = (Toggle)Instantiate(SceneThumbnail);
-        tmb.isOn = true;
-        tmb.group = sceneTmbContainer;
-        tmb.transform.SetParent(scnTmb, false);
+
         SceneClass.SceneList sL1 = new SceneClass.SceneList() {
-            SceneContainer = scnWn,
+            SceneContainer = null,
             SceneNumber = 1,
-            IsSelected = true,
             Background = "",
             BoardTitle = "",
             TitleColor = "",
@@ -90,23 +93,26 @@ public class MainWorkspace : MonoBehaviour
 
     //Button onClick Event Handlers
     public void previewLesson() {
-
+        //
     }
 
     public void saveLesson() {
-
+        //
     }
 
     public void viewOtherLessons() {
-
+        //
     }
 
     public void addScene() {
+        GameObject gmObj = (GameObject)Instantiate(sceneWnd);
+        Button btn = gmObj.transform.GetChild(3).GetComponent<Button>();
+        btn.gameObject.SetActive(false);
         int ln = scnLs.Count;
+        totalScene.text = (ln + 1).ToString();
         SceneClass.SceneList sL1 = new SceneClass.SceneList() {
-            SceneContainer = sceneWnd,
+            SceneContainer = gmObj,
             SceneNumber = ln + 1,
-            IsSelected = true,
             Background = "",
             BoardTitle = "",
             TitleColor = "",
@@ -127,42 +133,7 @@ public class MainWorkspace : MonoBehaviour
         };
         scnLs.Add(sL1);
         generatedSlides += 1;
-        Transform trScn = sceneWndCon.transform.GetChild(0);
-        Destroy(trScn.gameObject);
-        Transform scnCon = (Transform)sceneWndCon.transform;
-        GameObject scnWn = (GameObject)Instantiate(sL1.SceneContainer);
-        scnWn.transform.SetParent(scnCon, false);
-        Transform trf = null;
-        
-        Transform slideCon = (Transform)sceneTmbContainer.transform;
-        Toggle tmb = (Toggle)Instantiate(SceneThumbnail);
-        tmb.isOn = false;
-        tmb.group = sceneTmbContainer;
-        tmb.transform.SetParent(slideCon, false);
-        Transform t = tmb.transform.GetChild(2);
-        Text txt = t.GetComponent<Text>();
-        txt.text = "Scene " + (generatedSlides).ToString();
-        EventTrigger trg = tmb.GetComponent<EventTrigger>();
-        EventTrigger.Entry entr = new EventTrigger.Entry();
-        entr.eventID = EventTriggerType.PointerUp;
-        entr.callback.AddListener((_) => { selectScene((Text)txt); });
-        trg.triggers.Add(entr);
-        totalScene.text = (ln + 1).ToString();
-        Toggle[] tgl = sceneTmbContainer.GetComponentsInChildren<Toggle>();
-        for(int i = 0; i < tgl.Length; i++) {
-            if(tgl[i].isOn) {
-                if(i == tgl.Length - 1) {
-                    trf = scnWn.transform.GetChild(2);
-                    Button b = trf.GetComponent<Button>(); 
-                    b.gameObject.SetActive(false);
-                } else if(i == 0) {
-                    trf = scnWn.transform.GetChild(3);
-                    Button b = trf.GetComponent<Button>(); 
-                    b.gameObject.SetActive(false);
-                }
-                
-            }
-        }
+        wsFnc.addThumbnail(sceneTmbContainer, SceneThumbnail, generatedSlides, selectScene, gmObj);
     }
 
     public void saveScene() {
@@ -349,7 +320,6 @@ namespace SceneClassHolder {
         public class SceneList {
             public GameObject SceneContainer { get; set; }
             public int SceneNumber { get; set; }
-            public bool IsSelected { get; set; }
             //Scene
             public string Background { get; set; }
             public string BoardTitle { get; set; }
