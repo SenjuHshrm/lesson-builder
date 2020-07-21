@@ -51,24 +51,32 @@ public class MainWorkspace : MonoBehaviour
     public void initScene() {
         totalScene.text = "1";
         currentScene.text = "1";
-        // //Scene
-        // Transform scnCon = (Transform)sceneWndCon.transform;
-        // GameObject scnWn = (GameObject)Instantiate(sceneWnd);
-        // scnWn.transform.SetParent(scnCon, false);
-        // Transform t = scnWn.transform.GetChild(3);
-        // Button b = t.GetComponent<Button>(); 
-        // b.gameObject.SetActive(false);
-        // //Scene thumbnail
-        // Transform scnTmb = (Transform)sceneTmbContainer.transform;
-        // Toggle tmb = (Toggle)Instantiate(SceneThumbnail);
-        // tmb.isOn = true;
-        // tmb.group = sceneTmbContainer;
-        // tmb.transform.SetParent(scnTmb, false);
-
+        //Set 1st scene template
         Transform scnCon = (Transform)sceneWndCon.transform;
-
+        GameObject scnWnC = (GameObject)Instantiate(sceneWnd);
+        Button btnC = scnWnC.transform.GetChild(3).GetComponent<Button>();
+        btnC.gameObject.SetActive(false);
+        scnWnC.transform.SetParent(scnCon, false);
+        //Instantiate scene thumbnail
+        Transform scnTmb = (Transform)sceneTmbContainer.transform;
+        Toggle tmb = (Toggle)Instantiate(SceneThumbnail);
+        tmb.isOn = true;
+        tmb.group = sceneTmbContainer;
+        Text txt = tmb.transform.GetChild(2).GetComponent<Text>();
+        EventTrigger tmbEvTrg = tmb.GetComponent<EventTrigger>();
+        EventTrigger.Entry evtEntr = new EventTrigger.Entry();
+        evtEntr.eventID = EventTriggerType.PointerUp;
+        evtEntr.callback.AddListener((_) => { selectScene((Text)txt); });
+        tmbEvTrg.triggers.Add(evtEntr);
+        tmb.transform.SetParent(scnTmb, false);
+        //Set slide thumbnail
+        Transform scnConT = tmb.transform.GetChild(1);
+        GameObject scnWnT = (GameObject)Instantiate(sceneWnd);
+        Button btnT = scnWnT.transform.GetChild(3).GetComponent<Button>();
+        btnT.gameObject.SetActive(false);
+        scnWnT.transform.SetParent(scnConT, false);
         SceneClass.SceneList sL1 = new SceneClass.SceneList() {
-            SceneContainer = null,
+            SceneContainer = scnWnC,
             SceneNumber = 1,
             Background = "",
             BoardTitle = "",
@@ -134,6 +142,7 @@ public class MainWorkspace : MonoBehaviour
         scnLs.Add(sL1);
         generatedSlides += 1;
         wsFnc.addThumbnail(sceneTmbContainer, SceneThumbnail, generatedSlides, selectScene, gmObj);
+        wsFnc.modifyThumbnailsOnAdd(sceneTmbContainer);
     }
 
     public void saveScene() {
@@ -159,13 +168,15 @@ public class MainWorkspace : MonoBehaviour
     }
 
     public void deleteScene() {
-        int sceneSize = scnLs.Count;
+        generatedSlides -= 1;
+        totalScene.text = generatedSlides.ToString();
         Toggle[] currToggle = sceneTmbContainer.GetComponentsInChildren<Toggle>();
         List<Toggle> toggleLs = new List<Toggle>(currToggle);
         for(int i = 0; i < toggleLs.Count; i++) {
             if(toggleLs[i].isOn) {
                 Destroy(toggleLs[i].gameObject);
                 toggleLs.RemoveAt(i);
+                scnLs.RemoveAt(i);
                 if(i == 0) {
                     currToggle[0].isOn = true;
                 } else {
@@ -175,15 +186,13 @@ public class MainWorkspace : MonoBehaviour
             }
         }
         currToggle = toggleLs.ToArray();
-        generatedSlides -= 1;
-        scnLs.RemoveAt(sceneSize - 1);
-        totalScene.text = (sceneSize - 1).ToString();
         for(int i = 0; i < currToggle.Length; i++) {
-            Transform t = currToggle[i].transform.GetChild(2);
-            Text txt = t.GetComponent<Text>();
+            Text txt = currToggle[i].transform.GetChild(2).GetComponent<Text>();
+            scnLs[i].SceneNumber = i + 1;
             txt.text = "Scene " + (i + 1).ToString();
             if(currToggle[i].isOn) {
-                selectScene(txt);
+                //selectScene(txt);
+                
             }
         }
         exitWarning();
@@ -197,26 +206,21 @@ public class MainWorkspace : MonoBehaviour
     }
 
     public void selectScene(Text txt) {
-        Transform trScn = sceneWndCon.transform.GetChild(0);
-        Destroy(trScn.gameObject);
-        string str = txt.text;
-        string[] s = str.Split(' ');
-        currentScene.text = s[1];
-        int i = int.Parse(s[1]);
-        SceneClass.SceneList scn = scnLs[i-1];
-        Transform scnCon = (Transform)sceneWndCon.transform;
-        GameObject scnWn = (GameObject)Instantiate(scn.SceneContainer);
-        scnWn.transform.SetParent(scnCon, false);
-        Transform t = null;
-        if(i == 1) {
-            t = scnWn.transform.GetChild(3);
-            Button b = t.GetComponent<Button>(); 
-            b.gameObject.SetActive(false);
-        } else if(i == scnLs.Count) {
-            t = scnWn.transform.GetChild(2);
-            Button b = t.GetComponent<Button>(); 
-            b.gameObject.SetActive(false);
+        //Set current scene number
+        string currScene = txt.text.Replace("Scene ", "");
+        currentScene.text = currScene;
+        int i = int.Parse(currScene) - 1;
+        if(scnLs[i].SceneContainer != null) {
+            //Remove current scene on the container
+            Transform trScn = sceneWndCon.transform.GetChild(0);
+            Destroy(trScn.gameObject);
+            //Instantiate scene from List<T>()
+            Transform scnCon = (Transform)sceneWndCon.transform;
+            GameObject scnWn = (GameObject)Instantiate(scnLs[i].SceneContainer);
+            scnWn.transform.SetParent(scnCon, false);
         }
+
+
     }
 
     public void changeObjectiveTextColor(int x) {

@@ -28,4 +28,27 @@ public class WorkspaceFunctions : MonoBehaviour
         Transform t = tmb.transform.GetChild(1);
         sceneWnd.transform.SetParent(t, false);
     }
+
+    public void modifyThumbnailsOnAdd(ToggleGroup tgrp) {
+        Toggle[] tgl = tgrp.GetComponentsInChildren<Toggle>();
+        for(int i = 0; i < tgl.Length; i++) {
+            Transform t = tgl[i].transform.GetChild(1).transform.GetChild(0);
+            if(i == tgl.Length - 1) {
+                Button pbtn = t.transform.GetChild(2).GetComponent<Button>();
+                pbtn.gameObject.SetActive(true);
+                Button nbtn = t.transform.GetChild(3).GetComponent<Button>();
+                nbtn.gameObject.SetActive(false);
+            } else if(i == 0) {
+                Button pbtn = t.transform.GetChild(2).GetComponent<Button>();
+                pbtn.gameObject.SetActive(false);
+                Button nbtn = t.transform.GetChild(3).GetComponent<Button>();
+                nbtn.gameObject.SetActive(true);
+            } else {
+                Button pbtn = t.transform.GetChild(2).GetComponent<Button>();
+                pbtn.gameObject.SetActive(true);
+                Button nbtn = t.transform.GetChild(3).GetComponent<Button>();
+                nbtn.gameObject.SetActive(true);
+            }
+        }
+    }
 }

@@ -17992,7 +17992,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   totalScene: {fileID: 1024583252}
   currentScene: {fileID: 284392841}
-  SceneThumbnail: {fileID: 8016929275751531991, guid: 4767501baadd2b74883f534bdd9120ad,
+  SceneThumbnail: {fileID: 1372469474841608816, guid: 4767501baadd2b74883f534bdd9120ad,
     type: 3}
   sceneTmbContainer: {fileID: 437736289}
   ObjTxtColor: {fileID: 1724694288}
