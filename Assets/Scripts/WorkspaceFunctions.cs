@@ -9,6 +9,11 @@ public delegate void SelectSceneDelegate(Text txt);
 
 public class WorkspaceFunctions : MonoBehaviour
 {
+    public void setProperties() {
+        
+    }
+
+
     public void addThumbnail(ToggleGroup tg, Toggle tgl, int i, SelectSceneDelegate selScn, GameObject sceneWnd) {
         Transform slideCon = (Transform)tg.transform;
         Toggle tmb = (Toggle)Instantiate(tgl);

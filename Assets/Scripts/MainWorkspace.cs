@@ -24,7 +24,8 @@ public class MainWorkspace : MonoBehaviour
         {0.16f, 0.32f, 0.55f},
         {0.49f, 0f, 0f}
     };
-    public List<SceneClass.SceneList> scnLs = new List<SceneClass.SceneList>();
+    public List<SceneList> scnLs = new List<SceneList>();
+    public SceneList[] scns;
     public int selectedScene;
     public float yAxis = -533.8f;
     public int generatedSlides = 1;
@@ -54,7 +55,7 @@ public class MainWorkspace : MonoBehaviour
         //Set 1st scene template
         Transform scnCon = (Transform)sceneWndCon.transform;
         GameObject scnWnC = (GameObject)Instantiate(sceneWnd);
-        Button btnC = scnWnC.transform.GetChild(3).GetComponent<Button>();
+        Button btnC = scnWnC.transform.GetChild(2).GetComponent<Button>();
         btnC.gameObject.SetActive(false);
         scnWnC.transform.SetParent(scnCon, false);
         //Instantiate scene thumbnail
@@ -72,11 +73,15 @@ public class MainWorkspace : MonoBehaviour
         //Set slide thumbnail
         Transform scnConT = tmb.transform.GetChild(1);
         GameObject scnWnT = (GameObject)Instantiate(sceneWnd);
-        Button btnT = scnWnT.transform.GetChild(3).GetComponent<Button>();
+        Button btnT = scnWnT.transform.GetChild(2).GetComponent<Button>();
         btnT.gameObject.SetActive(false);
         scnWnT.transform.SetParent(scnConT, false);
-        SceneClass.SceneList sL1 = new SceneClass.SceneList() {
-            SceneContainer = scnWnC,
+        //Set GameObject to list
+        GameObject scnWnCL = (GameObject)Instantiate(sceneWnd);
+        Button btnCL = scnWnCL.transform.GetChild(2).GetComponent<Button>();
+        btnCL.gameObject.SetActive(false);
+        SceneList sL1 = new SceneList() {
+            SceneContainer = scnWnCL,
             SceneNumber = 1,
             Background = "",
             BoardTitle = "",
@@ -97,6 +102,7 @@ public class MainWorkspace : MonoBehaviour
             Essay = false
         };
         scnLs.Add(sL1);
+        //print(JsonConvert.SerializeObject(scnLs.ToArray()));
     }
 
     //Button onClick Event Handlers
@@ -118,7 +124,7 @@ public class MainWorkspace : MonoBehaviour
         btn.gameObject.SetActive(false);
         int ln = scnLs.Count;
         totalScene.text = (ln + 1).ToString();
-        SceneClass.SceneList sL1 = new SceneClass.SceneList() {
+        SceneList sL1 = new SceneList() {
             SceneContainer = gmObj,
             SceneNumber = ln + 1,
             Background = "",
@@ -151,6 +157,8 @@ public class MainWorkspace : MonoBehaviour
             if(tgl[i].isOn) {
                 Transform tr = sceneWndCon.transform.GetChild(0);
                 scnLs[i].SceneContainer = tr.gameObject;
+                Text txt = tgl[i].transform.GetChild(2).GetComponent<Text>();
+                selectScene(txt);
                 break;
             }
         }
@@ -186,13 +194,16 @@ public class MainWorkspace : MonoBehaviour
             }
         }
         currToggle = toggleLs.ToArray();
+        print(currToggle.Length);
+        print(scnLs.Count);
         for(int i = 0; i < currToggle.Length; i++) {
             Text txt = currToggle[i].transform.GetChild(2).GetComponent<Text>();
             scnLs[i].SceneNumber = i + 1;
             txt.text = "Scene " + (i + 1).ToString();
             if(currToggle[i].isOn) {
-                //selectScene(txt);
-                
+                print("Code exed");
+                selectScene(txt);
+                break;
             }
         }
         exitWarning();
@@ -210,17 +221,40 @@ public class MainWorkspace : MonoBehaviour
         string currScene = txt.text.Replace("Scene ", "");
         currentScene.text = currScene;
         int i = int.Parse(currScene) - 1;
-        if(scnLs[i].SceneContainer != null) {
-            //Remove current scene on the container
-            Transform trScn = sceneWndCon.transform.GetChild(0);
-            Destroy(trScn.gameObject);
-            //Instantiate scene from List<T>()
-            Transform scnCon = (Transform)sceneWndCon.transform;
-            GameObject scnWn = (GameObject)Instantiate(scnLs[i].SceneContainer);
-            scnWn.transform.SetParent(scnCon, false);
+        //Remove current scene on the container
+        GameObject trScn = sceneWndCon.transform.GetChild(0).GetComponent<GameObject>();
+        Destroy(trScn);
+        //Instantiate scene from List<T>()
+        Transform scnCon = (Transform)sceneWndCon.transform;
+        GameObject scnWn = (GameObject)Instantiate(scnLs[i].SceneContainer);
+        //Modify slide thumbnail
+        Toggle[] tgrp = sceneTmbContainer.GetComponentsInChildren<Toggle>();
+        GameObject gmObj = tgrp[i].transform.GetChild(1).transform.GetChild(0).GetComponent<GameObject>();
+        Destroy(gmObj.gameObject);
+        GameObject tmb = (GameObject)Instantiate(scnLs[i].SceneContainer);
+        Transform gmObjn = (Transform)tgrp[i].transform.GetChild(1).transform;
+        Button btnScPrev = scnWn.transform.GetChild(2).GetComponent<Button>(),
+            btnScNxt = scnWn.transform.GetChild(3).GetComponent<Button>(),
+            btnTmPrev = tmb.transform.GetChild(2).GetComponent<Button>(),
+            btnTmNxt = tmb.transform.GetChild(3).GetComponent<Button>();
+        if(i == 0) {
+            btnScPrev.gameObject.SetActive(false);
+            btnScNxt.gameObject.SetActive(true);
+            btnTmPrev.gameObject.SetActive(false);
+            btnTmNxt.gameObject.SetActive(true);
+        } else if(i == scnLs.Count - 1) {
+            btnScPrev.gameObject.SetActive(true);
+            btnScNxt.gameObject.SetActive(false);
+            btnTmPrev.gameObject.SetActive(true);
+            btnTmNxt.gameObject.SetActive(false);
+        } else {
+            btnScPrev.gameObject.SetActive(true);
+            btnScNxt.gameObject.SetActive(true);
+            btnTmPrev.gameObject.SetActive(true);
+            btnTmNxt.gameObject.SetActive(true);
         }
-
-
+        scnWn.transform.SetParent(scnCon, false);
+        tmb.transform.SetParent(gmObjn, false);
     }
 
     public void changeObjectiveTextColor(int x) {
@@ -268,8 +302,7 @@ public class MainWorkspace : MonoBehaviour
             }
         }
         Sprite bg = Resources.Load<Sprite>("MyBackground/" + BgCh.text);
-        Transform tr = sceneWndCon.transform.GetChild(0);
-        GameObject gobj = tr.gameObject;
+        GameObject gobj = sceneWndCon.transform.GetChild(0).gameObject;
         gobj.GetComponent<Image>().sprite = bg;
         sceneBg.alpha = 0;
         sceneBg.blocksRaycasts = false;
@@ -320,30 +353,28 @@ public class MainWorkspace : MonoBehaviour
 }
 
 namespace SceneClassHolder {
-    public class SceneClass {
-        public class SceneList {
-            public GameObject SceneContainer { get; set; }
-            public int SceneNumber { get; set; }
-            //Scene
-            public string Background { get; set; }
-            public string BoardTitle { get; set; }
-            public string TitleColor { get; set; }
-            public string ContentColor { get; set; }
-            public string BoardTitleAnimation { get; set; }
-            public string BoardAnimation { get; set; }
-            public string Title { get; set; }
-            public string Board { get; set; }
-            public string[] Assets { get; set; }
-            //Functions
-            public bool Screenshot { get; set; }
-            public bool Drawing { get; set; }
-            public bool Story { get; set; }
-            //Assessment
-            public bool MultipleChoice { get; set; }
-            public bool Enumeration { get; set; }
-            public bool MatchingType { get; set; }
-            public bool FillInTheBlank { get; set; }
-            public bool Essay { get; set; }
-        };
+    public class SceneList {
+        public GameObject SceneContainer { get; set; }
+        public int SceneNumber { get; set; }
+        //Scene
+        public string Background { get; set; }
+        public string BoardTitle { get; set; }
+        public string TitleColor { get; set; }
+        public string ContentColor { get; set; }
+        public string BoardTitleAnimation { get; set; }
+        public string BoardAnimation { get; set; }
+        public string Title { get; set; }
+        public string Board { get; set; }
+        public string[] Assets { get; set; }
+        //Functions
+        public bool Screenshot { get; set; }
+        public bool Drawing { get; set; }
+        public bool Story { get; set; }
+        //Assessment
+        public bool MultipleChoice { get; set; }
+        public bool Enumeration { get; set; }
+        public bool MatchingType { get; set; }
+        public bool FillInTheBlank { get; set; }
+        public bool Essay { get; set; }
     }
 }
