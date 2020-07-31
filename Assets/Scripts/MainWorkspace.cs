@@ -158,6 +158,12 @@ public class MainWorkspace : MonoBehaviour
             if(tgl[i].isOn) {
                 GameObject tr = (GameObject)Instantiate(sceneWndCon.transform.GetChild(0).gameObject);
                 scnLs[i].SceneContainer = tr;
+                scnLs[i].Background = BgCh.text;
+                scnLs[i].Board = BoardCh.text;
+                scnLs[i].BoardTitle = BoardTitleCh.text;
+                Destroy(tgl[i].transform.GetChild(1).transform.GetChild(0).gameObject);
+                Transform t = (Transform)tgl[i].transform.GetChild(1);
+                tr.transform.SetParent(t, false);
                 break;
             }
         }
@@ -251,6 +257,7 @@ public class MainWorkspace : MonoBehaviour
         Transform scnCon = (Transform)sceneWndCon.transform;
         GameObject scnWn = (GameObject)Instantiate(scnLs[i].SceneContainer);
         scnWn.transform.SetParent(scnCon, false);
+        setProperties(i);
     }
 
     public void changeObjectiveTextColor(int x) {
@@ -354,7 +361,9 @@ public class MainWorkspace : MonoBehaviour
     }
 
     public void setProperties(int i) {
-
+        BgCh.text = scnLs[i].Background;
+        BoardTitleCh.text = scnLs[i].BoardTitle;
+        BoardCh.text = scnLs[i].Board;
     }
     
 
