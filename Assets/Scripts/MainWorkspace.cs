@@ -40,6 +40,7 @@ public class MainWorkspace : MonoBehaviour
         anim.functionTogglers("screenshot");
         anim.functionTogglers("drawing");
         anim.functionTogglers("story");
+        title.onValueChanged.AddListener(delegate { setTitle((string)title.text); });
         initScene();
     }
 
@@ -364,6 +365,13 @@ public class MainWorkspace : MonoBehaviour
         BgCh.text = scnLs[i].Background;
         BoardTitleCh.text = scnLs[i].BoardTitle;
         BoardCh.text = scnLs[i].Board;
+    }
+
+    public void setTitle(string x) {
+        Transform t= (Transform)Instantiate(sceneWndCon.transform.GetChild(0));
+        Text txt = t.transform.GetChild(5).transform.GetChild(0).GetComponent<Text>();
+        txt.text = x;
+        //sceneWndCon.transform.GetChild(0).transform.GetChild(5).transform.GetChild(0).GetComponent<Text>().text = x;
     }
     
 
