@@ -320,6 +320,10 @@ public class MainWorkspace : MonoBehaviour
                 BoardTitleCh.text = toggle.name;
             }
         }
+        Sprite bg = Resources.Load<Sprite>("MyTitleBoard/" + BoardTitleCh.text);
+        Transform gobj = sceneWndCon.transform.GetChild(0).transform.GetChild(5);
+        gobj.GetComponent<Image>().sprite = bg;
+        gobj.GetComponent<Image>().color = new Color(255f, 255f, 255f, 1f);
         titleBoard.alpha = 0;
         titleBoard.blocksRaycasts = false;
         popUpOverlay.alpha = 0;
@@ -339,6 +343,10 @@ public class MainWorkspace : MonoBehaviour
                 BoardCh.text = toggle.name;
             }
         }
+        Sprite bg = Resources.Load<Sprite>("MyBoard/" + BoardCh.text);
+        Transform gobj = sceneWndCon.transform.GetChild(0).transform.GetChild(4);
+        gobj.GetComponent<Image>().sprite = bg;
+        gobj.GetComponent<Image>().color = new Color(255f, 255f, 255f, 1f);
         contentBoard.alpha = 0;
         contentBoard.blocksRaycasts = false;
         popUpOverlay.alpha = 0;
