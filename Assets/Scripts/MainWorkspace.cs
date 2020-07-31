@@ -300,6 +300,7 @@ public class MainWorkspace : MonoBehaviour
         Sprite bg = Resources.Load<Sprite>("MyBackground/" + BgCh.text);
         Transform gobj = sceneWndCon.transform.GetChild(0);
         gobj.GetComponent<Image>().sprite = bg;
+        gobj.GetComponent<Image>().color = new Color(255f, 255f, 255f, 1f);
         sceneBg.alpha = 0;
         sceneBg.blocksRaycasts = false;
         popUpOverlay.alpha = 0;
