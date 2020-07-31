@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -9,11 +8,6 @@ public delegate void SelectSceneDelegate(Text txt);
 
 public class WorkspaceFunctions : MonoBehaviour
 {
-    public void setProperties() {
-        
-    }
-
-
     public void addThumbnail(ToggleGroup tg, Toggle tgl, int i, SelectSceneDelegate selScn, GameObject sceneWnd) {
         Transform slideCon = (Transform)tg.transform;
         Toggle tmb = (Toggle)Instantiate(tgl);
@@ -34,26 +28,35 @@ public class WorkspaceFunctions : MonoBehaviour
         sceneWnd.transform.SetParent(t, false);
     }
 
-    public void modifyThumbnailsOnAdd(ToggleGroup tgrp) {
+    public void modifyThumbnailsOnAdd(ToggleGroup tgrp, SelectSceneDelegate selScn, List<SceneList> ls) {
         Toggle[] tgl = tgrp.GetComponentsInChildren<Toggle>();
         for(int i = 0; i < tgl.Length; i++) {
-            Transform t = tgl[i].transform.GetChild(1).transform.GetChild(0);
-            if(i == tgl.Length - 1) {
-                Button pbtn = t.transform.GetChild(2).GetComponent<Button>();
-                pbtn.gameObject.SetActive(true);
-                Button nbtn = t.transform.GetChild(3).GetComponent<Button>();
-                nbtn.gameObject.SetActive(false);
-            } else if(i == 0) {
-                Button pbtn = t.transform.GetChild(2).GetComponent<Button>();
+            Button pbtn = tgl[i].transform.GetChild(1).transform.GetChild(0).transform.GetChild(2).GetComponent<Button>(),
+                    nbtn = tgl[i].transform.GetChild(1).transform.GetChild(0).transform.GetChild(3).GetComponent<Button>(),
+                    pbtnC = ls[i].SceneContainer.transform.GetChild(2).GetComponent<Button>(),
+                    nbtnC = ls[i].SceneContainer.transform.GetChild(3).GetComponent<Button>();
+
+            if(i == 0) {
                 pbtn.gameObject.SetActive(false);
-                Button nbtn = t.transform.GetChild(3).GetComponent<Button>();
                 nbtn.gameObject.SetActive(true);
-            } else {
-                Button pbtn = t.transform.GetChild(2).GetComponent<Button>();
+                pbtnC.gameObject.SetActive(false);
+                nbtnC.gameObject.SetActive(true);
+            } else if(i == tgl.Length - 1) {
                 pbtn.gameObject.SetActive(true);
-                Button nbtn = t.transform.GetChild(3).GetComponent<Button>();
+                nbtn.gameObject.SetActive(false);
+                pbtnC.gameObject.SetActive(true);
+                nbtnC.gameObject.SetActive(false);
+            } else {
+                pbtn.gameObject.SetActive(true);
                 nbtn.gameObject.SetActive(true);
+                pbtnC.gameObject.SetActive(true);
+                nbtnC.gameObject.SetActive(true);
             }
+            if(tgl[i].isOn) {
+                Text txt = tgl[i].transform.GetChild(2).GetComponent<Text>();
+                selScn(txt);
+            }
+            continue;
         }
     }
 }
