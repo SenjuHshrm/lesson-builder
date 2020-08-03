@@ -41,6 +41,7 @@ public class MainWorkspace : MonoBehaviour
         anim.functionTogglers("drawing");
         anim.functionTogglers("story");
         title.onValueChanged.AddListener(delegate { setTitle((string)title.text); });
+        board.onValueChanged.AddListener(delegate { setContent((string)board.text); });
         initScene();
     }
 
@@ -86,12 +87,13 @@ public class MainWorkspace : MonoBehaviour
             SceneNumber = 1,
             Background = "",
             BoardTitle = "",
-            TitleColor = "",
-            ContentColor = "",
+            TitleColor = 0,
+            ContentColor = 0,
             BoardTitleAnimation = "",
             BoardAnimation = "",
             Title = "",
             Board = "",
+            BoardContent = "",
             Assets = {},
             Screenshot = false,
             Drawing = false,
@@ -130,12 +132,13 @@ public class MainWorkspace : MonoBehaviour
             SceneNumber = ln + 1,
             Background = "",
             BoardTitle = "",
-            TitleColor = "",
-            ContentColor = "",
+            TitleColor = 0,
+            ContentColor = 0,
             BoardTitleAnimation = "",
             BoardAnimation = "",
             Title = "",
             Board = "",
+            BoardContent = "",
             Assets = {},
             Screenshot = false,
             Drawing = false,
@@ -162,12 +165,28 @@ public class MainWorkspace : MonoBehaviour
                 scnLs[i].Background = BgCh.text;
                 scnLs[i].Board = BoardCh.text;
                 scnLs[i].BoardTitle = BoardTitleCh.text;
+                scnLs[i].TitleColor = getSelectedColor(titleTxtColor);
+                scnLs[i].ContentColor = getSelectedColor(contentTxtColor);
+                scnLs[i].Title = title.text;
+                scnLs[i].BoardContent = board.text;
                 Destroy(tgl[i].transform.GetChild(1).transform.GetChild(0).gameObject);
                 Transform t = (Transform)tgl[i].transform.GetChild(1);
                 tr.transform.SetParent(t, false);
                 break;
             }
         }
+    }
+
+    private int getSelectedColor(ToggleGroup tg) {
+        Toggle[] tgl = tg.GetComponentsInChildren<Toggle>();
+        int x = 0;
+        for(int i = 0; i < tgl.Length; i++) {
+            if(tgl[i].isOn) {
+                x = i;
+                break;
+            }
+        }
+        return x;
     }
 
     public void deleteSceneWarning() {
@@ -263,6 +282,16 @@ public class MainWorkspace : MonoBehaviour
 
     public void changeObjectiveTextColor(int x) {
         (Objectives.transform.Find("Text").GetComponent<Text>()).color = new Color(objTxtColors[x, 0], objTxtColors[x, 1], objTxtColors[x, 2], 1f);
+    }
+
+    public void changeTitleTextColor(int x) {
+        Text txt = sceneWndCon.transform.GetChild(0).transform.GetChild(5).transform.GetChild(0).gameObject.GetComponent<Text>();
+        txt.color = new Color(objTxtColors[x, 0], objTxtColors[x, 1], objTxtColors[x, 2], 1f);
+    }
+
+    public void changeContentTextColor(int x) {
+        Text txt = sceneWndCon.transform.GetChild(0).transform.GetChild(4).transform.GetChild(0).gameObject.GetComponent<Text>();
+        txt.color = new Color(objTxtColors[x, 0], objTxtColors[x, 1], objTxtColors[x, 2], 1f);
     }
 
     public void addAsset() {
@@ -365,13 +394,20 @@ public class MainWorkspace : MonoBehaviour
         BgCh.text = scnLs[i].Background;
         BoardTitleCh.text = scnLs[i].BoardTitle;
         BoardCh.text = scnLs[i].Board;
+        title.text = scnLs[i].Title;
+        board.text = scnLs[i].BoardContent;
+        titleTxtColor.transform.GetChild(scnLs[i].TitleColor).GetComponent<Toggle>().isOn = true;
+        contentTxtColor.transform.GetChild(scnLs[i].ContentColor).GetComponent<Toggle>().isOn = true;
     }
 
     public void setTitle(string x) {
-        Transform t= (Transform)Instantiate(sceneWndCon.transform.GetChild(0));
-        Text txt = t.transform.GetChild(5).transform.GetChild(0).GetComponent<Text>();
+        Text txt = sceneWndCon.transform.GetChild(0).transform.GetChild(5).transform.GetChild(0).gameObject.GetComponent<Text>();
         txt.text = x;
-        //sceneWndCon.transform.GetChild(0).transform.GetChild(5).transform.GetChild(0).GetComponent<Text>().text = x;
+    }
+
+    public void setContent(string x) {
+        Text txt = sceneWndCon.transform.GetChild(0).transform.GetChild(4).transform.GetChild(0).gameObject.GetComponent<Text>();
+        txt.text = x;
     }
     
 
@@ -384,12 +420,13 @@ namespace SceneClassHolder {
         //Scene
         public string Background { get; set; }
         public string BoardTitle { get; set; }
-        public string TitleColor { get; set; }
-        public string ContentColor { get; set; }
+        public int TitleColor { get; set; }
+        public int ContentColor { get; set; }
         public string BoardTitleAnimation { get; set; }
         public string BoardAnimation { get; set; }
         public string Title { get; set; }
         public string Board { get; set; }
+        public string BoardContent { get; set; }
         public string[] Assets { get; set; }
         //Functions
         public bool Screenshot { get; set; }
