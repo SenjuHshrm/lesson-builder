@@ -16,7 +16,7 @@ public class MainWorkspace : MonoBehaviour
     public ToggleGroup sceneTmbContainer, ObjTxtColor, titleTxtColor, contentTxtColor, ObjBoard, BackgroundImg, TitleBoard, ContentBoard;
     public CanvasGroup popUpOverlay, objctvBoard, sceneBg, titleBoard, contentBoard, deleteSceneWarn;
     public InputField Objectives, ObjBoardCh, title, board, BgCh, BoardTitleCh, BoardCh;
-    public GameObject sceneWnd, sceneWndCon, animateObj, wsFncObj;
+    public GameObject sceneWnd, sceneWndCon, animateObj, wsFncObj, titleScroll, boardScroll;
     public float[,] objTxtColors = new float[,] {
         {0.01f, 0.01f, 0.01f},
         {0.44f, 0.44f, 0.44f},
@@ -42,6 +42,8 @@ public class MainWorkspace : MonoBehaviour
         anim.functionTogglers("story");
         title.onValueChanged.AddListener(delegate { setTitle((string)title.text); });
         board.onValueChanged.AddListener(delegate { setContent((string)board.text); });
+        titleScroll.GetComponent<ScrollRect>().gameObject.SetActive(false);
+        boardScroll.GetComponent<ScrollRect>().gameObject.SetActive(false);
         initScene();
     }
 
@@ -361,6 +363,8 @@ public class MainWorkspace : MonoBehaviour
         Transform gobj = sceneWndCon.transform.GetChild(0).transform.GetChild(5);
         gobj.GetComponent<Image>().sprite = bg;
         gobj.GetComponent<Image>().color = new Color(255f, 255f, 255f, 1f);
+        titleScroll.GetComponent<ScrollRect>().gameObject.SetActive(true);
+        title.interactable = true;
         titleBoard.alpha = 0;
         titleBoard.blocksRaycasts = false;
         popUpOverlay.alpha = 0;
@@ -384,6 +388,8 @@ public class MainWorkspace : MonoBehaviour
         Transform gobj = sceneWndCon.transform.GetChild(0).transform.GetChild(4);
         gobj.GetComponent<Image>().sprite = bg;
         gobj.GetComponent<Image>().color = new Color(255f, 255f, 255f, 1f);
+        boardScroll.GetComponent<ScrollRect>().gameObject.SetActive(true);
+        board.interactable = true;
         contentBoard.alpha = 0;
         contentBoard.blocksRaycasts = false;
         popUpOverlay.alpha = 0;
@@ -398,6 +404,11 @@ public class MainWorkspace : MonoBehaviour
         board.text = scnLs[i].BoardContent;
         titleTxtColor.transform.GetChild(scnLs[i].TitleColor).GetComponent<Toggle>().isOn = true;
         contentTxtColor.transform.GetChild(scnLs[i].ContentColor).GetComponent<Toggle>().isOn = true;
+        title.interactable = (scnLs[i].BoardTitle == "") ? false : true;
+        board.interactable = (scnLs[i].Board == "") ? false : true;
+        boardScroll.GetComponent<ScrollRect>().gameObject.SetActive((scnLs[i].Board == "") ? false : true);
+        titleScroll.GetComponent<ScrollRect>().gameObject.SetActive((scnLs[i].BoardTitle == "") ? false : true);
+        
     }
 
     public void setTitle(string x) {
