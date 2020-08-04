@@ -12,8 +12,8 @@ using SceneClassHolder;
 public class MainWorkspace : MonoBehaviour
 {
     public Text totalScene, currentScene;
-    public Toggle SceneThumbnail;
-    public ToggleGroup sceneTmbContainer, ObjTxtColor, titleTxtColor, contentTxtColor, ObjBoard, BackgroundImg, TitleBoard, ContentBoard;
+    public Toggle SceneThumbnail, AssetItem;
+    public ToggleGroup sceneTmbContainer, ObjTxtColor, titleTxtColor, contentTxtColor, ObjBoard, BackgroundImg, TitleBoard, ContentBoard, assetsContainer;
     public CanvasGroup popUpOverlay, objctvBoard, sceneBg, titleBoard, contentBoard, deleteSceneWarn;
     public InputField Objectives, ObjBoardCh, title, board, BgCh, BoardTitleCh, BoardCh;
     public GameObject sceneWnd, sceneWndCon, animateObj, wsFncObj, titleScroll, boardScroll;
@@ -25,10 +25,7 @@ public class MainWorkspace : MonoBehaviour
         {0.49f, 0f, 0f}
     };
     public List<SceneList> scnLs = new List<SceneList>();
-    public SceneList[] scns;
-    public int selectedScene;
-    public float yAxis = -533.8f;
-    public int generatedSlides = 1;
+    public int generatedSlides = 1, assetsCount = 0;
     public Animations anim;
     public WorkspaceFunctions wsFnc;
 
@@ -297,7 +294,30 @@ public class MainWorkspace : MonoBehaviour
     }
 
     public void addAsset() {
+        assetsCount += 1;
+        Transform t = (Transform)assetsContainer.transform;
+        Toggle tg = (Toggle)Instantiate(AssetItem);
+        tg.isOn = (assetsCount == 1) ? true : false ;
+        tg.group = assetsContainer;
+        Text txt = tg.transform.GetChild(1).GetComponent<Text>();
+        txt.text = "Asset " + assetsCount.ToString();
+        EventTrigger trgr = tg.transform.GetChild(2).GetComponent<EventTrigger>();
+        EventTrigger.Entry entr = new EventTrigger.Entry();
+        entr.eventID = EventTriggerType.PointerUp;
+        entr.callback.AddListener((_) => { deleteAsset((Text)txt); });
+        trgr.triggers.Add(entr);
+        tg.transform.SetParent(t, false);
+    }
 
+    public void deleteAsset(Text txt) {
+        assetsCount -= 1;
+        foreach(var toggle in assetsContainer.ActiveToggles()) {
+            Text t = toggle.transform.GetChild(1).GetComponent<Text>();
+            if(t.text == txt.text) {
+                Destroy(toggle.gameObject);
+                break;
+            }
+        }
     }
 
     public void openFileDlg() {

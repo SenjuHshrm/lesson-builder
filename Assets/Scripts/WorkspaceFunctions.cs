@@ -59,4 +59,8 @@ public class WorkspaceFunctions : MonoBehaviour
             continue;
         }
     }
+
+    public void modifyAssetList(ToggleGroup tg) {
+        
+    }
 }
