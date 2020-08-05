@@ -12,6 +12,7 @@ using SceneClassHolder;
 public class MainWorkspace : MonoBehaviour
 {
     public Text totalScene, currentScene;
+    public Image assetCon;
     public Toggle SceneThumbnail, AssetItem;
     public ToggleGroup sceneTmbContainer, ObjTxtColor, titleTxtColor, contentTxtColor, ObjBoard, BackgroundImg, TitleBoard, ContentBoard, assetsContainer;
     public CanvasGroup popUpOverlay, objctvBoard, sceneBg, titleBoard, contentBoard, deleteSceneWarn;
@@ -295,8 +296,10 @@ public class MainWorkspace : MonoBehaviour
 
     public void addAsset() {
         assetsCount += 1;
-        Transform t = (Transform)assetsContainer.transform;
+        Transform t = (Transform)assetsContainer.transform,
+                imgCon = (Transform)sceneWndCon.transform.GetChild(0);
         Toggle tg = (Toggle)Instantiate(AssetItem);
+        Image img = (Image)Instantiate(assetCon);
         tg.isOn = (assetsCount == 1) ? true : false ;
         tg.group = assetsContainer;
         Text txt = tg.transform.GetChild(1).GetComponent<Text>();
@@ -306,6 +309,7 @@ public class MainWorkspace : MonoBehaviour
         entr.eventID = EventTriggerType.PointerUp;
         entr.callback.AddListener((_) => { deleteAsset((Text)txt); });
         trgr.triggers.Add(entr);
+        img.transform.SetParent(imgCon, false);
         tg.transform.SetParent(t, false);
     }
 
