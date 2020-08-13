@@ -15,9 +15,9 @@ public class MainWorkspace : MonoBehaviour
     public Image assetCon;
     public Toggle SceneThumbnail, AssetItem;
     public ToggleGroup sceneTmbContainer, ObjTxtColor, titleTxtColor, contentTxtColor, ObjBoard, BackgroundImg, TitleBoard, ContentBoard, assetsContainer;
-    public CanvasGroup popUpOverlay, objctvBoard, sceneBg, titleBoard, contentBoard, deleteSceneWarn;
+    public CanvasGroup popUpOverlay, objctvBoard, sceneBg, titleBoard, contentBoard, deleteSceneWarn, previewWnd;
     public InputField Objectives, ObjBoardCh, title, board, BgCh, BoardTitleCh, BoardCh;
-    public GameObject sceneWnd, sceneWndCon, animateObj, wsFncObj, titleScroll, boardScroll;
+    public GameObject sceneWnd, sceneWndCon, animateObj, wsFncObj, previewObj, titleScroll, boardScroll, previewCon;
     public float[,] objTxtColors = new float[,] {
         {0.01f, 0.01f, 0.01f},
         {0.44f, 0.44f, 0.44f},
@@ -26,15 +26,17 @@ public class MainWorkspace : MonoBehaviour
         {0.49f, 0f, 0f}
     };
     public List<SceneList> scnLs = new List<SceneList>();
-    public int generatedSlides = 1, assetsCount = 0;
+    public int generatedSlides = 1, assetsCount = 0, previewCount = 0;
     public Animations anim;
     public WorkspaceFunctions wsFnc;
+    public Preview prev;
 
     // Start is called before the first frame update
     void Start()
     {
         anim = animateObj.GetComponent<Animations>();
         wsFnc = wsFncObj.GetComponent<WorkspaceFunctions>();
+        prev = previewObj.GetComponent<Preview>();
         anim.functionTogglers("screenshot");
         anim.functionTogglers("drawing");
         anim.functionTogglers("story");
@@ -111,6 +113,35 @@ public class MainWorkspace : MonoBehaviour
     //Button onClick Event Handlers
     public void previewLesson() {
         //
+        previewWnd.alpha = 1f;
+        previewWnd.blocksRaycasts = true;
+        //
+        // for(int i = 0; i < scnLs.Count; i++) {
+        //     GameObject scn = (GameObject)Instantiate(scnLs[i].SceneContainer);
+        //     Button prv = scn.transform.GetChild(2).gameObject.GetComponent<Button>(),
+        //         nxt = scn.transform.GetChild(3).gameObject.GetComponent<Button>();
+        //     prv.interactable = true;
+        //     nxt.interactable = true;
+        //     scnLs[i].SceneContainer = (GameObject)Instantiate(scn);
+        // }
+        Transform prvCon = previewCon.transform;
+        GameObject frstScn = (GameObject)Instantiate(scnLs[0].SceneContainer);
+        frstScn.transform.SetParent(prvCon, false);
+        //Debug.Log(previewCon);
+        prev.initPreview(scnLs, previewCon);
+    }
+    
+    public void exitPreview() {
+        previewWnd.alpha = 0f;
+        previewWnd.blocksRaycasts = false;
+        for(int i = 0; i < scnLs.Count; i++) {
+            GameObject scn = scnLs[i].SceneContainer;
+            Button prv = scn.transform.GetChild(2).GetComponent<Button>(),
+                nxt = scn.transform.GetChild(3).GetComponent<Button>();
+            prv.interactable = false;
+            nxt.interactable = false;
+            scnLs[i].SceneContainer = scn;
+        }
     }
 
     public void saveLesson() {
@@ -322,10 +353,6 @@ public class MainWorkspace : MonoBehaviour
                 break;
             }
         }
-    }
-
-    public void openFileDlg() {
-        string path = EditorUtility.OpenFilePanel("Select asset to use", "", "png");
     }
 
     public void openObjctvBoardChooser() {

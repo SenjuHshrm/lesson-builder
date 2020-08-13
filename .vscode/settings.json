@@ -52,5 +52,7 @@
         "ProjectSettings/":true,
         "temp/":true,
         "Temp/":true
-    }
+    },
+
+    "terminal.integrated.shell.windows": "C:\\Users\\Ronelbargamento.PYL0N\\AppData\\Local\\Programs\\Git\\bin\\bash.exe",
 }
