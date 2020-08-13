@@ -115,33 +115,18 @@ public class MainWorkspace : MonoBehaviour
         //
         previewWnd.alpha = 1f;
         previewWnd.blocksRaycasts = true;
-        //
-        // for(int i = 0; i < scnLs.Count; i++) {
-        //     GameObject scn = (GameObject)Instantiate(scnLs[i].SceneContainer);
-        //     Button prv = scn.transform.GetChild(2).gameObject.GetComponent<Button>(),
-        //         nxt = scn.transform.GetChild(3).gameObject.GetComponent<Button>();
-        //     prv.interactable = true;
-        //     nxt.interactable = true;
-        //     scnLs[i].SceneContainer = (GameObject)Instantiate(scn);
-        // }
         Transform prvCon = previewCon.transform;
         GameObject frstScn = (GameObject)Instantiate(scnLs[0].SceneContainer);
         frstScn.transform.SetParent(prvCon, false);
         //Debug.Log(previewCon);
-        prev.initPreview(scnLs, previewCon);
+        prev.initPreview(scnLs);
     }
     
     public void exitPreview() {
         previewWnd.alpha = 0f;
         previewWnd.blocksRaycasts = false;
-        for(int i = 0; i < scnLs.Count; i++) {
-            GameObject scn = scnLs[i].SceneContainer;
-            Button prv = scn.transform.GetChild(2).GetComponent<Button>(),
-                nxt = scn.transform.GetChild(3).GetComponent<Button>();
-            prv.interactable = false;
-            nxt.interactable = false;
-            scnLs[i].SceneContainer = scn;
-        }
+        Transform t = previewCon.transform.GetChild(0);
+        Destroy(t.gameObject);
     }
 
     public void saveLesson() {

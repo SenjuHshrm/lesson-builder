@@ -6,11 +6,12 @@ using SceneClassHolder;
 public class Preview : MonoBehaviour
 {
     public List<SceneList> lists;
-    public int previewCount = 0, lsCount = 0;
+    public int previewCount, lsCount;
     public GameObject prevCon, prevRegion;
     public Button prev, nxt, exitBtn;
 
-    public void initPreview(List<SceneList> a, GameObject con) {
+    public void initPreview(List<SceneList> a) {
+        previewCount = 0;
         lists = new List<SceneList>(a);
         lsCount = lists.Count - 1;
         setBtns();
